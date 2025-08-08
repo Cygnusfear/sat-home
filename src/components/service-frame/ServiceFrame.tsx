@@ -10,7 +10,7 @@ export function ServiceFrame({ serviceId, serviceName }: ServiceFrameProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Use relative URL so it works regardless of host
+  // Use relative URL - works with Vite proxy in dev, Traefik in production
   const proxyUrl = `/api/proxy/${serviceId}/`;
 
   useEffect(() => {

@@ -18,7 +18,7 @@ export default function AppLayout() {
 		console.log("AppLayout useEffect running!");
 		const controller = new AbortController();
 
-		fetch("http://localhost:3001/api/config", {
+		fetch("/api/config", {
 			signal: controller.signal,
 			headers: {
 				"Content-Type": "application/json",
