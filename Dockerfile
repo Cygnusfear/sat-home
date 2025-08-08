@@ -1,5 +1,5 @@
 # Build stage
-FROM oven/bun:1-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -8,13 +8,13 @@ COPY package.json ./
 COPY server/package.json ./server/
 
 # Install all dependencies
-RUN bun install
+RUN npm install
 
 # Copy source code
 COPY . .
 
 # Build the frontend
-RUN bun run build
+RUN npm run build
 
 # Production stage
 FROM oven/bun:1-alpine
