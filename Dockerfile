@@ -44,8 +44,11 @@ ENV PROXY_PORT=3001
 ENV PORT=3000
 
 # Create startup script
-RUN echo '#!/bin/sh\nbun run server/src/index.ts &\nbun run start\nwait' > /app/start.sh && \
+RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'cd /app && bun run server/src/index.ts &' >> /app/start.sh && \
+    echo 'cd /app && bun run start' >> /app/start.sh && \
+    echo 'wait' >> /app/start.sh && \
     chmod +x /app/start.sh
 
 # Start both services
-CMD ["/app/start.sh"]
+CMD ["sh", "/app/start.sh"]

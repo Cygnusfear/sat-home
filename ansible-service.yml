@@ -1,0 +1,15 @@
+  satsang_home:
+    name: "satsang_home"
+    enabled: true
+    image: "ghcr.io/cygnusfear/sat-home"
+    version: "latest"
+    host: "home.{{ domain }}"
+    use_auth: false
+    use_tinyauth: true
+    directories:
+      - "{{ base_path }}/services/satsang_home"
+      - "{{ base_path }}/services/satsang_home/config"
+    volumes_mount:
+      - "{{ base_path }}/services/satsang_home/config:/config"
+    traefik:
+      port: 3000
