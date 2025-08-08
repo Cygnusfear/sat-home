@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "Satsang Home",
+    "theme": "dark",
+    "defaultService": "home"
+  },
+  "services": [
+    {
+      "id": "sonarr",
+      "name": "Sonarr",
+      "url": "http://localhost:8989",
+      "icon": "📺",
+      "description": "TV Show management",
+      "auth": {
+        "type": "apikey",
+        "header": "X-Api-Key",
+        "value": "your-sonarr-api-key"
+      },
+      "tags": ["media", "tv"],
+      "order": 1
+    },
+    {
+      "id": "radarr",
+      "name": "Radarr",
+      "url": "http://localhost:7878",
+      "icon": "🎬",
+      "description": "Movie management",
+      "auth": {
+        "type": "apikey",
+        "header": "X-Api-Key",
+        "value": "your-radarr-api-key"
+      },
+      "tags": ["media", "movies"],
+      "order": 2
+    },
+    {
+      "id": "plex",
+      "name": "Plex",
+      "url": "http://localhost:32400/web",
+      "icon": "🎭",
+      "description": "Media server",
+      "auth": {
+        "type": "none"
+      },
+      "tags": ["media", "streaming"],
+      "order": 3
+    },
+    {
+      "id": "portainer",
+      "name": "Portainer",
+      "url": "http://localhost:9000",
+      "icon": "🐳",
+      "description": "Docker management",
+      "auth": {
+        "type": "none"
+      },
+      "tags": ["infrastructure"],
+      "order": 4
+    },
+    {
+      "id": "homeassistant",
+      "name": "Home Assistant",
+      "url": "http://localhost:8123",
+      "icon": "🏠",
+      "description": "Home automation",
+      "auth": {
+        "type": "bearer",
+        "value": "your-home-assistant-token"
+      },
+      "tags": ["automation"],
+      "order": 5
+    }
+  ]
+}

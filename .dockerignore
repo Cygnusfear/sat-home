@@ -2,3 +2,17 @@
 build
 node_modules
 README.md
+.git
+.gitignore
+.env
+.env.local
+dist
+.DS_Store
+*.log
+.vscode
+.idea
+docker-compose.yml
+Dockerfile
+.dockerignore
+tmp
+.cache

@@ -1,0 +1,19 @@
+{
+  "name": "@satsang-home/server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "elysia": "latest",
+    "@elysiajs/cors": "latest",
+    "@elysiajs/swagger": "latest",
+    "@elysiajs/static": "latest"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

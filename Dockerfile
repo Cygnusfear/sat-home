@@ -1,22 +1,51 @@
-FROM node:20-alpine AS development-dependencies-env
-COPY . /app
-WORKDIR /app
-RUN npm ci
+# Build stage
+FROM oven/bun:1-alpine AS builder
 
-FROM node:20-alpine AS production-dependencies-env
-COPY ./package.json package-lock.json /app/
 WORKDIR /app
-RUN npm ci --omit=dev
 
-FROM node:20-alpine AS build-env
-COPY . /app/
-COPY --from=development-dependencies-env /app/node_modules /app/node_modules
-WORKDIR /app
-RUN npm run build
+# Copy package files
+COPY package.json bun.lockb ./
+COPY server/package.json ./server/
 
-FROM node:20-alpine
-COPY ./package.json package-lock.json /app/
-COPY --from=production-dependencies-env /app/node_modules /app/node_modules
-COPY --from=build-env /app/build /app/build
+# Install all dependencies
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the frontend
+RUN bun run build
+
+# Production stage
+FROM oven/bun:1-alpine
+
 WORKDIR /app
-CMD ["npm", "run", "start"]
+
+# Install production dependencies only
+COPY package.json bun.lockb ./
+COPY server/package.json ./server/
+RUN bun install --production --frozen-lockfile
+
+# Copy built frontend and server code
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/server ./server
+COPY --from=builder /app/shared ./shared
+
+# Create config directory
+RUN mkdir -p /config
+
+# Expose ports
+EXPOSE 3000 3001
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV CONFIG_PATH=/config/config.json
+ENV PROXY_PORT=3001
+ENV PORT=3000
+
+# Create startup script
+RUN echo '#!/bin/sh\nbun run server/src/index.ts &\nbun run start\nwait' > /app/start.sh && \
+    chmod +x /app/start.sh
+
+# Start both services
+CMD ["/app/start.sh"]

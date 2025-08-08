@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  satsang-home:
+    build: .
+    container_name: satsang-home
+    restart: unless-stopped
+    ports:
+      - "3000:3000"  # Frontend
+      - "3001:3001"  # Backend API/Proxy
+    volumes:
+      - ./config:/config
+      - ./public:/app/public  # For serving icons/images
+    environment:
+      - NODE_ENV=production
+      - CONFIG_PATH=/config/config.json
+      - PROXY_PORT=3001
+      - PORT=3000
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+    networks:
+      - satsang-network
+
+networks:
+  satsang-network:
+    driver: bridge
