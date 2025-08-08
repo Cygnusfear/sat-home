@@ -211,6 +211,24 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
             /["']\/api\/v1\//g,
             `"/api/proxy/${serviceId}/api/v1/`
           );
+          
+          // For Radarr/Sonarr, rewrite their API base URL
+          if (serviceId === "radarr" || serviceId === "sonarr") {
+            // Rewrite apiRoot and urlBase
+            text = text.replace(
+              /apiRoot:\s*["']\/api["']/g,
+              `apiRoot: "/api/proxy/${serviceId}/api"`
+            );
+            text = text.replace(
+              /urlBase:\s*["']\/?["']/g,
+              `urlBase: "/api/proxy/${serviceId}"`
+            );
+            // Rewrite window.Sonarr or window.Radarr settings
+            text = text.replace(
+              /window\.(Sonarr|Radarr)\s*=\s*\{/g,
+              `window.$1 = { urlBase: "/api/proxy/${serviceId}", apiRoot: "/api/proxy/${serviceId}/api", `
+            );
+          }
         }
 
         return text;
