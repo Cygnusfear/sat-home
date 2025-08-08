@@ -148,6 +148,11 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           /(href|src|action)='\/([^']*?)'/g,
           `$1='/api/proxy/${serviceId}/$2'`
         );
+        // Handle Jellyfin's special asset paths with encoded characters
+        text = text.replace(
+          /src="([^"]+\.js|[^"]+\.css)\?([^"]*)"/g,
+          `src="/api/proxy/${serviceId}/$1?$2"`
+        );
         
         // CSS url() rewriting
         text = text.replace(
@@ -155,7 +160,7 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           `url(/api/proxy/${serviceId}/$1)`
         );
 
-        // JavaScript API path rewriting for *arr apps
+        // JavaScript API path rewriting
         if (contentType.includes("javascript")) {
           // Rewrite fetch/axios calls to absolute paths
           text = text.replace(
@@ -170,6 +175,16 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           text = text.replace(
             /\/signalr\/hubs/g,
             `/api/proxy/${serviceId}/signalr/hubs`
+          );
+          // Rewrite _next paths for Jellyseer
+          text = text.replace(
+            /\/_next\//g,
+            `/api/proxy/${serviceId}/_next/`
+          );
+          // Rewrite API v1 calls for Jellyseer
+          text = text.replace(
+            /["']\/api\/v1\//g,
+            `"/api/proxy/${serviceId}/api/v1/`
           );
         }
 
