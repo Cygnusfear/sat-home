@@ -4,11 +4,11 @@ FROM oven/bun:1-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package.json bun.lockb ./
+COPY package.json ./
 COPY server/package.json ./server/
 
 # Install all dependencies
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # Copy source code
 COPY . .
@@ -22,9 +22,9 @@ FROM oven/bun:1-alpine
 WORKDIR /app
 
 # Install production dependencies only
-COPY package.json bun.lockb ./
+COPY package.json ./
 COPY server/package.json ./server/
-RUN bun install --production --frozen-lockfile
+RUN bun install --production
 
 # Copy built frontend and server code
 COPY --from=builder /app/build ./build
