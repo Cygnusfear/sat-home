@@ -99,6 +99,7 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           contentType.includes("text/javascript")) {
         let text = await response.text();
         
+        // HTML attribute rewriting
         text = text.replace(
           /(href|src|action)="\/([^"]*?)"/g,
           `$1="/api/proxy/${serviceId}/$2"`
@@ -108,10 +109,29 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           `$1='/api/proxy/${serviceId}/$2'`
         );
         
+        // CSS url() rewriting
         text = text.replace(
           /url\(["']?\/(.*?)["']?\)/g,
           `url(/api/proxy/${serviceId}/$1)`
         );
+
+        // JavaScript API path rewriting for *arr apps
+        if (contentType.includes("javascript")) {
+          // Rewrite fetch/axios calls to absolute paths
+          text = text.replace(
+            /fetch\(["']\/api\//g,
+            `fetch("/api/proxy/${serviceId}/api/`
+          );
+          text = text.replace(
+            /axios\.\w+\(["']\/api\//g,
+            `axios.get("/api/proxy/${serviceId}/api/`
+          );
+          // Rewrite SignalR hub connections
+          text = text.replace(
+            /\/signalr\/hubs/g,
+            `/api/proxy/${serviceId}/signalr/hubs`
+          );
+        }
 
         return text;
       }
