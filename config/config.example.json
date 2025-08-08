@@ -12,9 +12,9 @@
       "icon": "📺",
       "description": "TV Show management",
       "auth": {
-        "type": "apikey",
-        "header": "X-Api-Key",
-        "value": "your-sonarr-api-key"
+        "type": "forms",
+        "username": "your-sonarr-username",
+        "password": "your-sonarr-password"
       },
       "tags": ["media", "tv"],
       "order": 1
@@ -26,9 +26,9 @@
       "icon": "🎬",
       "description": "Movie management",
       "auth": {
-        "type": "apikey",
-        "header": "X-Api-Key",
-        "value": "your-radarr-api-key"
+        "type": "forms",
+        "username": "your-radarr-username",
+        "password": "your-radarr-password"
       },
       "tags": ["media", "movies"],
       "order": 2
@@ -55,7 +55,8 @@
         "type": "none"
       },
       "tags": ["infrastructure"],
-      "order": 4
+      "order": 4,
+      "openInNewTab": true
     },
     {
       "id": "homeassistant",

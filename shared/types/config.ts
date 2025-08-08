@@ -6,7 +6,7 @@ export interface AppConfig {
 }
 
 export interface ServiceAuth {
-  type: "none" | "basic" | "apikey" | "bearer";
+  type: "none" | "basic" | "apikey" | "bearer" | "forms";
   username?: string;
   password?: string;
   header?: string;
@@ -22,6 +22,7 @@ export interface Service {
   auth: ServiceAuth;
   tags?: string[];
   order?: number;
+  openInNewTab?: boolean;
 }
 
 export interface Config {
@@ -33,4 +34,5 @@ export interface SanitizedService extends Omit<Service, "auth"> {
   auth: {
     type: ServiceAuth["type"];
   };
+  openInNewTab?: boolean;
 }

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
+import CommandMenu from "src/components/command";
 import type { Config, SanitizedService } from "../../shared/types/config";
 import { Sidebar } from "../components/sidebar/Sidebar";
+import "../assets/command.css";
 
 interface SanitizedConfig {
 	app: Config["app"];
@@ -76,11 +78,14 @@ export default function AppLayout() {
 	}
 
 	return (
-		<div className="flex h-screen w-screen">
-			<Sidebar services={config.services} app={config.app} />
-			<main className="flex-1 ml-13 w-full">
-				<Outlet context={{ config }} />
-			</main>
-		</div>
+		<>
+			<div className="flex h-screen w-screen linear">
+				<Sidebar services={config.services} app={config.app} />
+				<main className="flex-1 ml-13 w-full">
+					<Outlet context={{ config }} />
+				</main>
+			</div>
+			<CommandMenu config={config} />
+		</>
 	);
 }

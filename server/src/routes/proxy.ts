@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { configLoader } from "../services/config-loader";
 import { AuthInjector } from "../services/auth-injector";
+import { CookieStore } from "../services/cookie-store";
 import { headerMiddleware } from "../middleware/headers";
 
 export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
@@ -17,6 +18,17 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
     }
 
     try {
+      // Check if we need to authenticate with Forms auth
+      if (service.auth.type === "forms" && CookieStore.needsAuthentication(serviceId, service.auth)) {
+        console.log(`Service ${serviceId} needs Forms authentication`);
+        const authSuccess = await CookieStore.authenticate(serviceId, service.url, service.auth);
+        if (!authSuccess) {
+          console.error(`Forms authentication failed for ${serviceId}`);
+          set.status = 401;
+          return { error: "Authentication failed" };
+        }
+      }
+
       const targetUrl = new URL(path, service.url);
       
       if (request.url.includes("?")) {
@@ -31,10 +43,22 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
       const sanitizedHeaders = AuthInjector.sanitizeRequestHeaders(requestHeaders, targetUrl.toString());
       const headersWithAuth = AuthInjector.injectAuth(sanitizedHeaders, service.auth);
 
-      // Add cookie header explicitly
-      const cookieHeader = headers.cookie || headers.Cookie;
-      if (cookieHeader) {
-        headersWithAuth.set("Cookie", cookieHeader);
+      // Add stored cookies for Forms auth
+      if (service.auth.type === "forms") {
+        const storedCookies = CookieStore.getCookies(serviceId);
+        if (storedCookies) {
+          // Merge with any existing cookies from the client
+          const existingCookies = headersWithAuth.get("Cookie") || "";
+          const allCookies = existingCookies ? `${existingCookies}; ${storedCookies}` : storedCookies;
+          headersWithAuth.set("Cookie", allCookies);
+          console.log(`Using stored cookies for ${serviceId}`);
+        }
+      } else {
+        // For non-Forms auth, use client cookies
+        const cookieHeader = headers.cookie || headers.Cookie;
+        if (cookieHeader) {
+          headersWithAuth.set("Cookie", cookieHeader);
+        }
       }
 
       const proxyOptions: RequestInit = {
@@ -55,6 +79,26 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
       }
 
       const response = await fetch(targetUrl.toString(), proxyOptions);
+
+      // Store cookies from Forms auth services
+      if (service.auth.type === "forms") {
+        const setCookieHeaders: string[] = [];
+        const rawHeaders = response.headers as any;
+        
+        if (rawHeaders.getSetCookie) {
+          setCookieHeaders.push(...rawHeaders.getSetCookie());
+        } else {
+          const setCookie = response.headers.get("set-cookie");
+          if (setCookie) {
+            setCookieHeaders.push(setCookie);
+          }
+        }
+        
+        if (setCookieHeaders.length > 0) {
+          CookieStore.setCookies(serviceId, setCookieHeaders);
+          console.log(`Stored ${setCookieHeaders.length} cookies from ${serviceId} response`);
+        }
+      }
 
       // Log response for debugging Radarr/Sonarr
       if (serviceId === "radarr" || serviceId === "sonarr") {
@@ -77,20 +121,47 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
             redirectUrl = new URL(location, targetUrl);
           }
           
-          // If it's redirecting to a login page, we need to handle auth
-          if (redirectUrl.pathname.includes("/login")) {
-            console.log(`${serviceId} needs authentication, redirecting to login`);
-            // For login redirects, preserve the full path
-            const proxyRedirect = `/api/proxy/${serviceId}${redirectUrl.pathname}${redirectUrl.search}`;
+          // If it's redirecting to a login page and we have Forms auth
+          if (redirectUrl.pathname.includes("/login") && service.auth.type === "forms") {
+            console.log(`${serviceId} session expired, re-authenticating...`);
+            // Clear old cookies and re-authenticate
+            CookieStore.clearCookies(serviceId);
+            const authSuccess = await CookieStore.authenticate(serviceId, service.url, service.auth);
             
-            // Return a proper redirect response
-            set.status = 302;
-            set.headers = {
-              'Location': proxyRedirect
-            };
-            return '';
+            if (authSuccess) {
+              // Retry the original request with new cookies
+              const storedCookies = CookieStore.getCookies(serviceId);
+              if (storedCookies) {
+                headersWithAuth.set("Cookie", storedCookies);
+              }
+              
+              const retryResponse = await fetch(targetUrl.toString(), {
+                method: request.method,
+                headers: headersWithAuth,
+                redirect: "manual",
+                body: proxyOptions.body as any,
+              });
+              
+              // Return the retry response
+              const retryHeaders: Record<string, string> = {};
+              retryResponse.headers.forEach((value, key) => {
+                if (!["content-encoding", "content-length", "transfer-encoding"].includes(key.toLowerCase())) {
+                  retryHeaders[key] = value;
+                }
+              });
+              
+              set.status = retryResponse.status;
+              set.headers = retryHeaders;
+              
+              const arrayBuffer = await retryResponse.arrayBuffer();
+              return new Uint8Array(arrayBuffer);
+            } else {
+              // Auth failed, return 401
+              set.status = 401;
+              return { error: "Authentication required" };
+            }
           } else {
-            // For other redirects, follow them
+            // For other redirects or non-Forms auth, follow them
             const proxyRedirect = `/api/proxy/${serviceId}${redirectUrl.pathname}${redirectUrl.search}`;
             set.status = 302;
             set.headers = {
