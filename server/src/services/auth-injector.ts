@@ -34,18 +34,12 @@ export class AuthInjector {
 
   static sanitizeRequestHeaders(headers: Headers): Headers {
     const newHeaders = new Headers();
+    // Only skip headers that would break the proxy
     const skipHeaders = [
       "host",
       "connection",
-      "origin",
-      "referer",
-      "sec-fetch-dest",
-      "sec-fetch-mode",
-      "sec-fetch-site",
-      "sec-fetch-user",
-      "sec-ch-ua",
-      "sec-ch-ua-mobile",
-      "sec-ch-ua-platform"
+      "content-length", // Will be recalculated
+      "transfer-encoding" // Will be recalculated
     ];
 
     headers.forEach((value, key) => {

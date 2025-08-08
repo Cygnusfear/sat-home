@@ -24,18 +24,6 @@ export function Sidebar({ services, app }: SidebarProps) {
 			data-minimized={"true"}
 		>
 			<nav className="flex flex-col gap-1 p-1">
-				<Link
-					to="/"
-					className={cn(
-						`flex items-center gap-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors`,
-						!currentServiceId && "bg-gray-800 text-white",
-						"group-data-[minimized=true]/root:hidden",
-					)}
-				>
-					<img src={app.icon} className="h-6 w-6" alt={app.title} />
-					<span>Dashboard</span>
-				</Link>
-
 				{sortedServices.map((service) => (
 					<Link
 						key={service.id}

@@ -35,6 +35,7 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
         method: request.method,
         headers: headersWithAuth,
         redirect: "manual",
+        credentials: "include", // Forward cookies
       };
 
       if (request.method !== "GET" && request.method !== "HEAD" && body) {
