@@ -1,6 +1,6 @@
-import type { Route } from "./+types/api.proxy.$serviceId.$";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const serviceId = params.serviceId;
   const path = params["*"] || "";
   
@@ -21,7 +21,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   });
 }
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
   const serviceId = params.serviceId;
   const path = params["*"] || "";
   

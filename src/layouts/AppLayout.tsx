@@ -76,9 +76,9 @@ export default function AppLayout() {
 	}
 
 	return (
-		<div className="flex h-screen bg-gray-950">
+		<div className="flex h-screen w-screen">
 			<Sidebar services={config.services} app={config.app} />
-			<main className="flex-1 ml-64">
+			<main className="flex-1 ml-13 w-full">
 				<Outlet context={{ config }} />
 			</main>
 		</div>
