@@ -28,7 +28,7 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
       Object.entries(headers).forEach(([key, value]) => {
         if (value) requestHeaders.set(key, value);
       });
-      const sanitizedHeaders = AuthInjector.sanitizeRequestHeaders(requestHeaders);
+      const sanitizedHeaders = AuthInjector.sanitizeRequestHeaders(requestHeaders, targetUrl.toString());
       const headersWithAuth = AuthInjector.injectAuth(sanitizedHeaders, service.auth);
 
       const proxyOptions: RequestInit = {
@@ -51,11 +51,27 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
 
       const response = await fetch(targetUrl.toString(), proxyOptions);
 
+      // Log response for debugging Radarr/Sonarr
+      if (serviceId === "radarr" || serviceId === "sonarr") {
+        console.log(`${serviceId} response:`, {
+          status: response.status,
+          contentType: response.headers.get("content-type"),
+          contentLength: response.headers.get("content-length"),
+          location: response.headers.get("location")
+        });
+      }
+
       if (response.type === "opaqueredirect" || [301, 302, 303, 307, 308].includes(response.status)) {
         const location = response.headers.get("location");
         if (location) {
-          const redirectUrl = new URL(location, targetUrl);
-          const proxyRedirect = `/api/proxy/${serviceId}/${redirectUrl.pathname}${redirectUrl.search}`;
+          // Handle both absolute and relative redirects
+          let redirectUrl;
+          if (location.startsWith("http://") || location.startsWith("https://")) {
+            redirectUrl = new URL(location);
+          } else {
+            redirectUrl = new URL(location, targetUrl);
+          }
+          const proxyRedirect = `/api/proxy/${serviceId}${redirectUrl.pathname}${redirectUrl.search}`;
           set.redirect = proxyRedirect;
           return;
         }
@@ -63,11 +79,11 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
 
       const responseHeaders: Record<string, string> = {};
       const blockedHeaders = [
-        "content-encoding",
-        "content-length", 
-        "transfer-encoding",
-        "x-frame-options",
-        "content-security-policy",
+        "content-encoding", // We're not handling compression
+        "content-length", // Will be recalculated
+        "transfer-encoding", // Will be recalculated
+        "x-frame-options", // Block iframe restrictions
+        "content-security-policy", // Block CSP that might break iframes
         "x-content-security-policy",
         "x-webkit-csp"
       ];

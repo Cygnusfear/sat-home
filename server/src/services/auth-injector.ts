@@ -32,11 +32,11 @@ export class AuthInjector {
     return newHeaders;
   }
 
-  static sanitizeRequestHeaders(headers: Headers): Headers {
+  static sanitizeRequestHeaders(headers: Headers, targetUrl?: string): Headers {
     const newHeaders = new Headers();
     // Only skip headers that would break the proxy
     const skipHeaders = [
-      "host",
+      "host", // We'll set this separately
       "connection",
       "content-length", // Will be recalculated
       "transfer-encoding" // Will be recalculated
@@ -47,6 +47,16 @@ export class AuthInjector {
         newHeaders.set(key, value);
       }
     });
+
+    // Set the Host header to match the target service
+    if (targetUrl) {
+      try {
+        const url = new URL(targetUrl);
+        newHeaders.set("Host", url.host);
+      } catch (e) {
+        // Invalid URL, skip setting host
+      }
+    }
 
     return newHeaders;
   }
