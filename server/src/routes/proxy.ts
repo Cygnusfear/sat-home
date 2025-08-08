@@ -31,11 +31,16 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
       const sanitizedHeaders = AuthInjector.sanitizeRequestHeaders(requestHeaders, targetUrl.toString());
       const headersWithAuth = AuthInjector.injectAuth(sanitizedHeaders, service.auth);
 
+      // Add cookie header explicitly
+      const cookieHeader = headers.cookie || headers.Cookie;
+      if (cookieHeader) {
+        headersWithAuth.set("Cookie", cookieHeader);
+      }
+
       const proxyOptions: RequestInit = {
         method: request.method,
         headers: headersWithAuth,
         redirect: "manual",
-        credentials: "include", // Forward cookies
       };
 
       if (request.method !== "GET" && request.method !== "HEAD" && body) {
@@ -61,7 +66,7 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
         });
       }
 
-      if (response.type === "opaqueredirect" || [301, 302, 303, 307, 308].includes(response.status)) {
+      if ([301, 302, 303, 307, 308].includes(response.status)) {
         const location = response.headers.get("location");
         if (location) {
           // Handle both absolute and relative redirects
@@ -71,9 +76,28 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           } else {
             redirectUrl = new URL(location, targetUrl);
           }
-          const proxyRedirect = `/api/proxy/${serviceId}${redirectUrl.pathname}${redirectUrl.search}`;
-          set.redirect = proxyRedirect;
-          return;
+          
+          // If it's redirecting to a login page, we need to handle auth
+          if (redirectUrl.pathname.includes("/login")) {
+            console.log(`${serviceId} needs authentication, redirecting to login`);
+            // For login redirects, preserve the full path
+            const proxyRedirect = `/api/proxy/${serviceId}${redirectUrl.pathname}${redirectUrl.search}`;
+            
+            // Return a proper redirect response
+            set.status = 302;
+            set.headers = {
+              'Location': proxyRedirect
+            };
+            return '';
+          } else {
+            // For other redirects, follow them
+            const proxyRedirect = `/api/proxy/${serviceId}${redirectUrl.pathname}${redirectUrl.search}`;
+            set.status = 302;
+            set.headers = {
+              'Location': proxyRedirect
+            };
+            return '';
+          }
         }
       }
 

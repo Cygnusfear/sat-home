@@ -39,7 +39,8 @@ export class AuthInjector {
       "host", // We'll set this separately
       "connection",
       "content-length", // Will be recalculated
-      "transfer-encoding" // Will be recalculated
+      "transfer-encoding", // Will be recalculated
+      // Don't skip cookie - we need it for auth
     ];
 
     headers.forEach((value, key) => {
