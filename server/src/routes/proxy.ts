@@ -114,13 +114,24 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
       
       response.headers.forEach((value, key) => {
         if (!blockedHeaders.includes(key.toLowerCase())) {
-          // Rewrite Set-Cookie headers to remove domain restrictions
+          // Rewrite Set-Cookie headers to work with our proxy
           if (key.toLowerCase() === 'set-cookie') {
-            // Remove Domain= and Secure flags from cookies
-            const modifiedCookie = value
-              .replace(/Domain=[^;]+;?/gi, '')
-              .replace(/Secure;?/gi, '')
-              .replace(/SameSite=None;?/gi, 'SameSite=Lax;');
+            // Parse and modify cookie
+            let modifiedCookie = value
+              // Remove the domain so cookie works on current domain
+              .replace(/Domain=[^;]+;?\s*/gi, '')
+              // Remove Secure flag if we're on HTTP
+              .replace(/;\s*Secure/gi, '')
+              // Change SameSite to Lax for better compatibility
+              .replace(/SameSite=None/gi, 'SameSite=Lax')
+              // Add path prefix for the service
+              .replace(/Path=\//gi, `Path=/api/proxy/${serviceId}/`);
+            
+            // If no path was set, add one
+            if (!modifiedCookie.includes('Path=')) {
+              modifiedCookie += `; Path=/api/proxy/${serviceId}/`;
+            }
+            
             responseHeaders[key] = modifiedCookie;
           } else {
             responseHeaders[key] = value;
@@ -153,6 +164,20 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
           /src="([^"]+\.js|[^"]+\.css)\?([^"]*)"/g,
           `src="/api/proxy/${serviceId}/$1?$2"`
         );
+        
+        // Fix form submissions for Radarr/Sonarr
+        if (serviceId === "radarr" || serviceId === "sonarr") {
+          // Rewrite form action URLs
+          text = text.replace(
+            /action="\/login"/g,
+            `action="/api/proxy/${serviceId}/login"`
+          );
+          // Rewrite JavaScript form submissions
+          text = text.replace(
+            /url:\s*["']\/login["']/g,
+            `url: "/api/proxy/${serviceId}/login"`
+          );
+        }
         
         // CSS url() rewriting
         text = text.replace(
