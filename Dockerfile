@@ -17,16 +17,19 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM oven/bun:1-alpine
+FROM node:20-alpine
 
 WORKDIR /app
+
+# Install bun for the backend server
+RUN npm install -g bun
 
 # Copy package files
 COPY package.json ./
 COPY server/package.json ./server/
 
-# Install production dependencies
-RUN bun install --production
+# Install production dependencies with npm for React Router compatibility
+RUN npm install --production
 
 # Copy built frontend and server code
 COPY --from=builder /app/build ./build
@@ -49,7 +52,7 @@ ENV PORT=3000
 # Create startup script
 RUN echo '#!/bin/sh' > /app/start.sh && \
     echo 'bun /app/server/src/index.ts &' >> /app/start.sh && \
-    echo 'cd /app && bun run start' >> /app/start.sh && \
+    echo 'cd /app && npm run start' >> /app/start.sh && \
     echo 'wait' >> /app/start.sh && \
     chmod +x /app/start.sh
 
