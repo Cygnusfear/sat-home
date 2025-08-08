@@ -21,15 +21,18 @@ FROM oven/bun:1-alpine
 
 WORKDIR /app
 
-# Install production dependencies only
+# Copy package files
 COPY package.json ./
 COPY server/package.json ./server/
+
+# Install production dependencies
 RUN bun install --production
 
 # Copy built frontend and server code
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/server ./server
 COPY --from=builder /app/shared ./shared
+COPY --from=builder /app/public ./public
 
 # Create config directory
 RUN mkdir -p /config
@@ -45,7 +48,7 @@ ENV PORT=3000
 
 # Create startup script
 RUN echo '#!/bin/sh' > /app/start.sh && \
-    echo 'cd /app && bun run server/src/index.ts &' >> /app/start.sh && \
+    echo 'bun /app/server/src/index.ts &' >> /app/start.sh && \
     echo 'cd /app && bun run start' >> /app/start.sh && \
     echo 'wait' >> /app/start.sh && \
     chmod +x /app/start.sh
