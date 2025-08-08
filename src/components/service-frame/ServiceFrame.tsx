@@ -10,7 +10,8 @@ export function ServiceFrame({ serviceId, serviceName }: ServiceFrameProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const proxyUrl = `http://localhost:3001/api/proxy/${serviceId}/`;
+  // Use relative URL so it works regardless of host
+  const proxyUrl = `/api/proxy/${serviceId}/`;
 
   useEffect(() => {
     setLoading(true);

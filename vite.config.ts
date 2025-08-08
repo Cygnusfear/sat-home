@@ -8,4 +8,12 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@react-router/node"],
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
+    },
+  },
 });
