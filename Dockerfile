@@ -46,8 +46,17 @@ ENV CONFIG_PATH=/config/config.json
 ENV PROXY_PORT=3001
 ENV PORT=3000
 
+# Debug: Check what's in the build directory
+RUN ls -la /app/ && \
+    ls -la /app/build/ || echo "No build directory" && \
+    ls -la /app/build/server/ || echo "No build/server directory"
+
 # Create startup script
 RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'echo "=== Checking build structure ===" ' >> /app/start.sh && \
+    echo 'ls -la /app/build/' >> /app/start.sh && \
+    echo 'ls -la /app/build/server/' >> /app/start.sh && \
+    echo 'echo "=== Starting services ===" ' >> /app/start.sh && \
     echo 'bun /app/server/src/index.ts &' >> /app/start.sh && \
     echo 'cd /app && bun run start' >> /app/start.sh && \
     echo 'wait' >> /app/start.sh && \

@@ -1,5 +1,5 @@
-import { readFileSync, existsSync, watchFile } from "fs";
-import { join } from "path";
+import { join } from "node:path";
+import { existsSync, readFileSync, watchFile } from "fs";
 import type { Config, SanitizedService } from "../../../shared/types/config";
 
 class ConfigLoader {
@@ -8,7 +8,8 @@ class ConfigLoader {
   private watchers: Set<() => void> = new Set();
 
   constructor() {
-    this.configPath = process.env.CONFIG_PATH || join(process.cwd(), "../config/config.json");
+    this.configPath =
+      process.env.CONFIG_PATH || join(process.cwd(), "../config/config.json");
     this.loadConfig();
     this.watchConfig();
   }
@@ -16,17 +17,19 @@ class ConfigLoader {
   private loadConfig(): void {
     try {
       if (!existsSync(this.configPath)) {
-        console.warn(`Config file not found at ${this.configPath}, using defaults`);
+        console.warn(
+          `Config file not found at ${this.configPath}, using defaults`,
+        );
         this.config = this.getDefaultConfig();
         return;
       }
 
       const rawData = readFileSync(this.configPath, "utf-8");
       const parsedConfig = JSON.parse(rawData) as Config;
-      
+
       this.validateConfig(parsedConfig);
       this.config = parsedConfig;
-      
+
       console.log(`Config loaded: ${parsedConfig.services.length} services`);
       this.notifyWatchers();
     } catch (error) {
@@ -42,7 +45,9 @@ class ConfigLoader {
 
     for (const service of config.services) {
       if (!service.id || !service.name || !service.url) {
-        throw new Error(`Invalid service configuration: ${JSON.stringify(service)}`);
+        throw new Error(
+          `Invalid service configuration: ${JSON.stringify(service)}`,
+        );
       }
 
       if (!service.auth || !service.auth.type) {
@@ -52,7 +57,9 @@ class ConfigLoader {
       try {
         new URL(service.url);
       } catch {
-        throw new Error(`Invalid URL for service ${service.id}: ${service.url}`);
+        throw new Error(
+          `Invalid URL for service ${service.id}: ${service.url}`,
+        );
       }
     }
   }
@@ -71,9 +78,9 @@ class ConfigLoader {
       app: {
         title: "Satsang Home",
         theme: "dark",
-        defaultService: "home"
+        defaultService: "home",
       },
-      services: []
+      services: [],
     };
   }
 
@@ -84,7 +91,10 @@ class ConfigLoader {
     return this.config || this.getDefaultConfig();
   }
 
-  public getSanitizedConfig(): { app: Config["app"]; services: SanitizedService[] } {
+  public getSanitizedConfig(): {
+    app: Config["app"];
+    services: SanitizedService[];
+  } {
     const config = this.getConfig();
     return {
       app: config.app,
@@ -97,9 +107,9 @@ class ConfigLoader {
         tags: service.tags,
         order: service.order,
         auth: {
-          type: service.auth.type
-        }
-      }))
+          type: service.auth.type,
+        },
+      })),
     };
   }
 
