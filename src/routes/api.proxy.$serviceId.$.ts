@@ -35,6 +35,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const url = new URL(request.url);
   const apiUrl = `http://localhost:3001/api/proxy/${serviceId}/${path}${url.search}`;
   
+  // Action is only called for non-GET methods, so body is always allowed
   const response = await fetch(apiUrl, {
     method: request.method,
     headers: request.headers,
