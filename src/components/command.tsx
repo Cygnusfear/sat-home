@@ -3,6 +3,7 @@ import * as React from "react";
 import { useNavigate } from "react-router";
 import type { Config, SanitizedService } from "shared/types/config";
 import "../assets/command.css";
+import { cn } from "src/lib/utils";
 
 interface CommandMenuProps {
 	config: Config;
@@ -30,7 +31,7 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 			onOpenChange={onOpenChange}
 			label="Global Command Menu"
 		>
-			<Command.Input autoFocus placeholder="Search services or tags..." />
+			<Command.Input autoFocus placeholder="Search services..." />
 			<hr {...({ "cmdk-raycast-loader": "" } as any)} />
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
@@ -41,9 +42,9 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 						const searchValue = [
 							service.name,
 							service.description || "",
-							...(service.tags || [])
+							...(service.tags || []),
 						].join(" ");
-						
+
 						return (
 							<Command.Item
 								key={service.id}
@@ -64,7 +65,7 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 								<span>{service.name}</span>
 								{service.tags && service.tags.length > 0 && (
 									<span {...({ "cmdk-raycast-meta": "" } as any)}>
-										{service.tags.join(", ")}
+										{service.tags.join(", ").toLowerCase()}
 									</span>
 								)}
 							</Command.Item>
@@ -85,7 +86,7 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 						<span>🏠</span>
 						<span>Go Home</span>
 						<span {...({ "cmdk-raycast-meta": "" } as any)}>
-							Return to dashboard
+							return to dashboard
 						</span>
 					</Command.Item>
 				</Command.Group>

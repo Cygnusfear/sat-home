@@ -207,7 +207,7 @@
 .raycast [cmdk-raycast-meta] {
     margin-left: auto;
     color: var(--gray11);
-    font-size: 13px
+    @apply text-xs opacity-70;
 }
 
 .raycast [cmdk-list] {
