@@ -44,6 +44,22 @@
     --blue12: #eaf6ff
 }
 
+/* Raycast overlay and positioning */
+.raycast [cmdk-overlay] {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
+.raycast [cmdk-dialog] {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+}
+
 .raycast [cmdk-root] {
     @apply min-w-140;
     max-width: 640px;
@@ -377,6 +393,23 @@
 }
 
 
+/* Vercel overlay and positioning */
+.vercel [cmdk-overlay] {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
+.vercel [cmdk-dialog] {
+    @apply min-w-140;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+}
+
 .vercel [cmdk-root] {
     max-width: 640px;
     width: 100%;
@@ -391,7 +424,7 @@
     outline: none
 }
 
-.dark .vercel [cmdk-root] {
+.vercel [cmdk-root] {
     background: hsla(0,0%,9%,.7)
 }
 
@@ -535,6 +568,23 @@
     white-space: pre-wrap
 }
 
+/* Linear overlay and positioning */
+.linear [cmdk-overlay] {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
+.linear [cmdk-dialog] {
+    @apply min-w-140;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+}
+
 .linear [cmdk-root] {
     max-width: 640px;
     width: 100%;
@@ -547,7 +597,7 @@
     outline: none
 }
 
-.dark .linear [cmdk-root] {
+.linear [cmdk-root] {
     background: linear-gradient(136.61deg,#27282b 13.72%,#2d2e31 74.3%)
 }
 
@@ -741,6 +791,22 @@
         opacity: 0;
         transform: scale(.96)
     }
+}
+
+/* Framer overlay and positioning */
+.framer [cmdk-overlay] {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
+.framer [cmdk-dialog] {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
 }
 
 .framer [cmdk-root] {

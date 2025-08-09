@@ -152,62 +152,64 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 	};
 
 	return (
-		<Command.Dialog
-			open={open}
-			onOpenChange={onOpenChange}
-			label="Global Command Menu"
-		>
-			<Command.Input autoFocus placeholder="Search services..." />
-			{renderLoader()}
-			<Command.List>
-				<Command.Empty>No results found.</Command.Empty>
+		<div className={style}>
+			<Command.Dialog
+				open={open}
+				onOpenChange={onOpenChange}
+				label="Global Command Menu"
+			>
+				<Command.Input autoFocus placeholder="Search services..." />
+				{renderLoader()}
+				<Command.List>
+					<Command.Empty>No results found.</Command.Empty>
 
-				<Command.Group heading="Services">
-					{config.services.map((service) => {
-						// Include tags in the searchable value
-						const searchValue = [
-							service.name,
-							service.description || "",
-							...(service.tags || []),
-						].join(" ");
+					<Command.Group heading="Services">
+						{config.services.map((service) => {
+							// Include tags in the searchable value
+							const searchValue = [
+								service.name,
+								service.description || "",
+								...(service.tags || []),
+							].join(" ");
 
-						return (
-							<Command.Item
-								key={service.id}
-								value={searchValue}
-								onSelect={() => handleServiceSelect(service)}
-							>
-								{renderIcon(service)}
-								<span>{service.name}</span>
-								{renderMeta(service)}
-							</Command.Item>
-						);
-					})}
-				</Command.Group>
+							return (
+								<Command.Item
+									key={service.id}
+									value={searchValue}
+									onSelect={() => handleServiceSelect(service)}
+								>
+									{renderIcon(service)}
+									<span>{service.name}</span>
+									{renderMeta(service)}
+								</Command.Item>
+							);
+						})}
+					</Command.Group>
 
-				<Command.Separator />
+					<Command.Separator />
 
-				<Command.Group heading="Actions">
-					<Command.Item
-						value="home dashboard"
-						onSelect={() => {
-							onOpenChange(false);
-							navigate("/");
-						}}
-					>
-						<span>🏠</span>
-						<span>Go Home</span>
-						{style === "raycast" && (
-							<span {...getStyleAttributes("meta")}>
-								return to dashboard
-							</span>
-						)}
-					</Command.Item>
-				</Command.Group>
-			</Command.List>
+					<Command.Group heading="Actions">
+						<Command.Item
+							value="home dashboard"
+							onSelect={() => {
+								onOpenChange(false);
+								navigate("/");
+							}}
+						>
+							<span>🏠</span>
+							<span>Go Home</span>
+							{style === "raycast" && (
+								<span {...getStyleAttributes("meta")}>
+									return to dashboard
+								</span>
+							)}
+						</Command.Item>
+					</Command.Group>
+				</Command.List>
 
-			{renderFooter()}
-		</Command.Dialog>
+				{renderFooter()}
+			</Command.Dialog>
+		</div>
 	);
 };
 
