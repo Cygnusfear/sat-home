@@ -19,6 +19,12 @@ export function KeyboardInterceptor({
         e.preventDefault();
         e.stopPropagation();
         onOpenCommand();
+        
+        // Blur iframe if it has focus
+        const activeElement = document.activeElement;
+        if (activeElement?.tagName === "IFRAME") {
+          (activeElement as HTMLIFrameElement).blur();
+        }
       } else if (isMod && e.key === "b") {
         e.preventDefault();
         e.stopPropagation();
@@ -26,27 +32,50 @@ export function KeyboardInterceptor({
       }
     };
 
-    // Listen at the highest level with capture
+    // Add listener at the document level with capture
     document.addEventListener("keydown", handleKeyDown, true);
     window.addEventListener("keydown", handleKeyDown, true);
 
-    // Listen for messages from iframes
-    const handleMessage = (e: MessageEvent) => {
-      if (e.data?.type === "keyboard-shortcut") {
-        if (e.data.key === "k") {
-          onOpenCommand();
-        } else if (e.data.key === "b") {
-          onToggleSidebar();
-        }
+    // Focus trap that periodically steals focus from iframe
+    const focusInterval = setInterval(() => {
+      const activeElement = document.activeElement;
+      if (activeElement?.tagName === "IFRAME") {
+        // Create a temporary invisible input to capture keyboard events
+        const trap = document.createElement("input");
+        trap.style.position = "fixed";
+        trap.style.top = "-9999px";
+        trap.style.left = "-9999px";
+        trap.style.width = "1px";
+        trap.style.height = "1px";
+        trap.style.opacity = "0";
+        trap.style.pointerEvents = "none";
+        trap.tabIndex = -1;
+        
+        document.body.appendChild(trap);
+        
+        // Add keyboard listener to the trap
+        trap.addEventListener("keydown", (e) => {
+          const isMod = e.metaKey || e.ctrlKey;
+          if ((isMod && e.key === "k") || (isMod && e.key === "b")) {
+            handleKeyDown(e as KeyboardEvent);
+          }
+        });
+        
+        // Focus the trap briefly to capture events
+        trap.focus();
+        
+        // Refocus the iframe and remove trap after a short delay
+        setTimeout(() => {
+          (activeElement as HTMLIFrameElement).focus();
+          trap.remove();
+        }, 50);
       }
-    };
-
-    window.addEventListener("message", handleMessage);
+    }, 100);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
       window.removeEventListener("keydown", handleKeyDown, true);
-      window.removeEventListener("message", handleMessage);
+      clearInterval(focusInterval);
     };
   }, [onOpenCommand, onToggleSidebar]);
 

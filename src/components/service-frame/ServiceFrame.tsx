@@ -5,7 +5,6 @@ interface ServiceFrameProps {
 	serviceName: string;
 	serviceUrl: string;
 	useProxy?: boolean;
-	onKeyboardShortcut?: (key: string, metaKey: boolean) => void;
 }
 
 export function ServiceFrame({
@@ -13,7 +12,6 @@ export function ServiceFrame({
 	serviceName,
 	serviceUrl,
 	useProxy = false,
-	onKeyboardShortcut,
 }: ServiceFrameProps) {
 	const iframeRef = useRef<HTMLIFrameElement>(null);
 	const [loading, setLoading] = useState(true);
@@ -27,57 +25,6 @@ export function ServiceFrame({
 		setLoading(true);
 		setError(null);
 	}, [serviceId]);
-
-	useEffect(() => {
-		const iframe = iframeRef.current;
-		if (!iframe) return;
-
-		// Try to inject a script into the iframe to capture keyboard events
-		const handleIframeLoad = () => {
-			try {
-				// This will only work for same-origin iframes
-				const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-				if (iframeDoc) {
-					const script = iframeDoc.createElement("script");
-					script.textContent = `
-						document.addEventListener('keydown', function(e) {
-							if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'b')) {
-								e.preventDefault();
-								// Send message to parent
-								parent.postMessage({
-									type: 'keyboard-shortcut',
-									key: e.key,
-									metaKey: e.metaKey || e.ctrlKey
-								}, '*');
-							}
-						}, true);
-					`;
-					iframeDoc.body.appendChild(script);
-				}
-			} catch (e) {
-				// Cross-origin iframe, can't inject script
-				console.log("Cannot inject script into cross-origin iframe");
-			}
-		};
-
-		iframe.addEventListener("load", handleIframeLoad);
-		
-		return () => {
-			iframe.removeEventListener("load", handleIframeLoad);
-		};
-	}, []);
-
-	// Listen for messages from iframe
-	useEffect(() => {
-		const handleMessage = (e: MessageEvent) => {
-			if (e.data?.type === "keyboard-shortcut" && onKeyboardShortcut) {
-				onKeyboardShortcut(e.data.key, e.data.metaKey);
-			}
-		};
-
-		window.addEventListener("message", handleMessage);
-		return () => window.removeEventListener("message", handleMessage);
-	}, [onKeyboardShortcut]);
 
 	const handleLoad = () => {
 		setLoading(false);

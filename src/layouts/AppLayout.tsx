@@ -96,16 +96,7 @@ export default function AppLayout() {
 					className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? "ml-0" : "ml-12"}`}
 				>
 					<Outlet context={{ config }} />
-					<ServiceManager 
-						services={config.services}
-						onKeyboardShortcut={(key, metaKey) => {
-							if (key === "k") {
-								setCommandOpen((prev) => !prev);
-							} else if (key === "b") {
-								setSidebarCollapsed((prev) => !prev);
-							}
-						}}
-					/>
+					<ServiceManager services={config.services} />
 				</main>
 			</div>
 			<CommandMenu

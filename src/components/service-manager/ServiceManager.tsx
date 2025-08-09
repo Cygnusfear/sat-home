@@ -5,10 +5,9 @@ import { ServiceFrame } from "../service-frame/ServiceFrame";
 
 interface ServiceManagerProps {
 	services: SanitizedService[];
-	onKeyboardShortcut?: (key: string, metaKey: boolean) => void;
 }
 
-export function ServiceManager({ services, onKeyboardShortcut }: ServiceManagerProps) {
+export function ServiceManager({ services }: ServiceManagerProps) {
 	const params = useParams();
 	const location = useLocation();
 	const [loadedServices, setLoadedServices] = useState<Set<string>>(new Set());
@@ -55,7 +54,6 @@ export function ServiceManager({ services, onKeyboardShortcut }: ServiceManagerP
 							serviceName={service.name}
 							serviceUrl={service.url}
 							useProxy={service.useProxy}
-							onKeyboardShortcut={onKeyboardShortcut}
 						/>
 					</div>
 				);
