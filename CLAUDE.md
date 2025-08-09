@@ -16,3 +16,9 @@
 - Use environment variables or config files for any URLs or domains
 - The public repo should only contain application code and Dockerfile
 - Replace any real domains with example.com or localhost in committed code
+
+### GIT Instructions
+
+- Always use conventional commits
+- Do not commit sensitive information
+- Do not push before explicit confirmation from the user 
