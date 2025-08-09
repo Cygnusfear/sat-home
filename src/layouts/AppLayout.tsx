@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import CommandMenu from "src/components/command";
 import type { Config, SanitizedService } from "../../shared/types/config";
 import { Sidebar } from "../components/sidebar/Sidebar";
+import { ServiceManager } from "../components/service-manager/ServiceManager";
 import "../assets/command.css";
 
 interface SanitizedConfig {
@@ -101,6 +102,7 @@ export default function AppLayout() {
 				/>
 				<main className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? 'ml-0' : 'ml-12'}`}>
 					<Outlet context={{ config }} />
+					<ServiceManager services={config.services} />
 				</main>
 			</div>
 			<CommandMenu config={config} />

@@ -1,14 +1,5 @@
-import { useOutletContext, useParams } from "react-router";
-import type { Config, SanitizedService } from "../../shared/types/config";
-import { ServiceFrame } from "../components/service-frame/ServiceFrame";
+import { useParams } from "react-router";
 import type { Route } from "./+types/service.$id";
-
-interface ContextType {
-	config: {
-		app: Config["app"];
-		services: SanitizedService[];
-	};
-}
 
 export function meta(_: Route.MetaArgs) {
 	const { id } = useParams();
@@ -18,54 +9,9 @@ export function meta(_: Route.MetaArgs) {
 	return [{ title }];
 }
 
+// ServiceManager in AppLayout handles all the rendering
 export default function ServicePage() {
-	const { id } = useParams();
-	const context = useOutletContext<ContextType>();
-
-	if (!context || !context.config) {
-		return (
-			<div className="flex items-center justify-center h-full">
-				<div className="animate-spin rounded-full h-12 w-12 "></div>
-			</div>
-		);
-	}
-
-	const { config } = context;
-
-	const service = config.services.find((s) => s.id === id);
-
-	if (!service) {
-		return (
-			<div className="flex items-center justify-center h-full">
-				<div className="text-center">
-					<div className="text-4xl mb-4">❓</div>
-					<p className="text-gray-400">Service not found</p>
-				</div>
-			</div>
-		);
-	}
-
-	// If service is configured to open in new tab, show a message
-	if (service.openInNewTab) {
-		return (
-			<div className="flex items-center justify-center h-full">
-				<div className="text-center">
-					<div className="text-6xl mb-4">🚀</div>
-					<p className="text-gray-300 text-lg mb-2">
-						{service.name} opens in a new tab
-					</p>
-					<p className="text-gray-500">Click the sidebar link to open</p>
-				</div>
-			</div>
-		);
-	}
-
-	return (
-		<ServiceFrame
-			serviceId={service.id}
-			serviceName={service.name}
-			serviceUrl={service.url}
-			useProxy={service.useProxy}
-		/>
-	);
+	// This component is now just a placeholder for routing
+	// All iframe management happens in ServiceManager
+	return null;
 }

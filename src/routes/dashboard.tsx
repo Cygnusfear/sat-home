@@ -23,5 +23,13 @@ export default function Dashboard() {
 
 	const { config } = context;
 
-	return <div className="p-8"></div>;
+	return (
+		<div className="flex items-center justify-center h-full">
+			<div className="text-center">
+				<div className="text-8xl mb-4">⛩️</div>
+				<h1 className="text-4xl font-bold text-gray-100 mb-2">{config.app.title}</h1>
+				<p className="text-gray-400">Select a service from the sidebar or press ⌘K to search</p>
+			</div>
+		</div>
+	);
 }
