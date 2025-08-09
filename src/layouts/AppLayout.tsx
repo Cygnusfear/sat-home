@@ -91,6 +91,7 @@ export default function AppLayout() {
 					services={config.services}
 					app={config.app}
 					collapsed={sidebarCollapsed}
+					onToggleCollapsed={() => setSidebarCollapsed((prev) => !prev)}
 				/>
 				<main
 					className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? "ml-0" : "ml-12"}`}
