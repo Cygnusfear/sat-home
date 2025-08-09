@@ -97,4 +97,4 @@ docker-compose.override.yml
 # Project
 config/config.json
 .mcp**
-.docs/**
+.docs/**ANSIBLE_SETUP.md

@@ -1,3 +1,4 @@
+import { LuChevronsLeft } from "react-icons/lu";
 import { Link, useParams } from "react-router";
 import { cn } from "src/lib/utils";
 import type { Config, SanitizedService } from "../../../shared/types/config";
@@ -43,7 +44,7 @@ export function Sidebar({
 					onClick={onToggleCollapsed}
 				>
 					<img
-						src={"/a.png"}
+						src={"/images/a.png"}
 						className="h-6 w-6 flex-shrink-0"
 						alt={"Toggle Sidebar"}
 					/>
@@ -87,6 +88,21 @@ export function Sidebar({
 							</Link>
 						);
 					})}
+					<div className="flex-grow" />
+					<Link
+						key={"bar"}
+						to={`#`}
+						className={cn(
+							"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors",
+						)}
+						title={"Toggle Sidebar"}
+						onClick={onToggleCollapsed}
+					>
+						<LuChevronsLeft
+							className="h-4 w-4 flex-shrink-0"
+							title={"Toggle Sidebar"}
+						/>
+					</Link>
 				</nav>
 			</aside>
 		</>
