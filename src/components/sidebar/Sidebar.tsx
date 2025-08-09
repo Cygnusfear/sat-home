@@ -79,7 +79,7 @@ export function Sidebar({
 								}
 								target={service.openInNewTab ? "_blank" : "_self"}
 								className={cn(
-									"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors hover:brightness-125",
+									"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors brightness-75 hover:brightness-125",
 									currentServiceId === service.id && "bg-gray-800 text-white",
 								)}
 								title={service.name}

@@ -30,37 +30,46 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 			onOpenChange={onOpenChange}
 			label="Global Command Menu"
 		>
-			<Command.Input autoFocus placeholder="Search services..." />
+			<Command.Input autoFocus placeholder="Search services or tags..." />
 			<hr {...({ "cmdk-raycast-loader": "" } as any)} />
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
 
 				<Command.Group heading="Services">
-					{config.services.map((service) => (
-						<Command.Item
-							key={service.id}
-							value={`${service.name} ${service.description || ""}`}
-							onSelect={() => handleServiceSelect(service)}
-						>
-							{service.icon &&
-								(service.icon.startsWith("/") ||
-								service.icon.startsWith("http") ? (
-									<img
-										src={service.icon}
-										alt=""
-										style={{ width: "18px", height: "18px" }}
-									/>
-								) : (
-									<span>{service.icon}</span>
-								))}
-							<span>{service.name}</span>
-							{service.description && (
-								<span {...({ "cmdk-raycast-meta": "" } as any)}>
-									{service.description}
-								</span>
-							)}
-						</Command.Item>
-					))}
+					{config.services.map((service) => {
+						// Include tags in the searchable value
+						const searchValue = [
+							service.name,
+							service.description || "",
+							...(service.tags || [])
+						].join(" ");
+						
+						return (
+							<Command.Item
+								key={service.id}
+								value={searchValue}
+								onSelect={() => handleServiceSelect(service)}
+							>
+								{service.icon &&
+									(service.icon.startsWith("/") ||
+									service.icon.startsWith("http") ? (
+										<img
+											src={service.icon}
+											alt=""
+											style={{ width: "18px", height: "18px" }}
+										/>
+									) : (
+										<span>{service.icon}</span>
+									))}
+								<span>{service.name}</span>
+								{service.tags && service.tags.length > 0 && (
+									<span {...({ "cmdk-raycast-meta": "" } as any)}>
+										{service.tags.join(", ")}
+									</span>
+								)}
+							</Command.Item>
+						);
+					})}
 				</Command.Group>
 
 				<Command.Separator />
