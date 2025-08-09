@@ -375,3 +375,629 @@
         transform: scale(.96)
     }
 }
+
+
+.vercel [cmdk-root] {
+    max-width: 640px;
+    width: 100%;
+    padding: 8px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    border: 1px solid var(--gray6);
+    box-shadow: var(--cmdk-shadow);
+    transition: transform .1s ease;
+    outline: none
+}
+
+.dark .vercel [cmdk-root] {
+    background: hsla(0,0%,9%,.7)
+}
+
+.vercel [cmdk-input] {
+    font-family: var(--font-sans);
+    border: none;
+    width: 100%;
+    font-size: 17px;
+    padding: 8px 8px 16px;
+    outline: none;
+    background: var(--bg);
+    color: var(--gray12);
+    border-bottom: 1px solid var(--gray6);
+    margin-bottom: 16px;
+    border-radius: 0
+}
+
+.vercel [cmdk-input]::placeholder {
+    color: var(--gray9)
+}
+
+.vercel [cmdk-vercel-badge] {
+    height: 20px;
+    background: var(--grayA3);
+    display: inline-flex;
+    padding: 0 8px;
+    font-size: 12px;
+    color: var(--grayA11);
+    border-radius: 4px;
+    margin: 4px 0 4px 4px;
+    text-transform: capitalize;
+    font-weight: 500
+}
+
+.vercel [cmdk-item],.vercel [cmdk-vercel-badge] {
+    align-items: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none
+}
+
+.vercel [cmdk-item] {
+    content-visibility: auto;
+    cursor: pointer;
+    height: 48px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    gap: 8px;
+    padding: 0 16px;
+    color: var(--gray11);
+    will-change: background,color;
+    transition: all .15s ease;
+    transition-property: none
+}
+
+.vercel [cmdk-item][data-selected=true] {
+    background: var(--grayA3);
+    color: var(--gray12)
+}
+
+.vercel [cmdk-item][data-disabled=true] {
+    color: var(--gray8);
+    cursor: not-allowed
+}
+
+.vercel [cmdk-item]:active {
+    transition-property: background;
+    background: var(--gray4)
+}
+
+.vercel [cmdk-item]+[cmdk-item] {
+    margin-top: 4px
+}
+
+.vercel [cmdk-item] svg {
+    width: 18px;
+    height: 18px
+}
+
+.vercel [cmdk-list] {
+    height: min(330px,var(--cmdk-list-height));
+    max-height: 400px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    transition: .1s ease;
+    transition-property: height
+}
+
+.vercel [cmdk-vercel-shortcuts] {
+    display: flex;
+    margin-left: auto;
+    gap: 8px
+}
+
+.vercel [cmdk-vercel-shortcuts] kbd {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    min-width: 20px;
+    padding: 4px;
+    height: 20px;
+    border-radius: 4px;
+    color: var(--gray11);
+    background: var(--gray4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase
+}
+
+.vercel [cmdk-separator] {
+    height: 1px;
+    width: 100%;
+    background: var(--gray5);
+    margin: 4px 0
+}
+
+.vercel :not([hidden])+[cmdk-group] {
+    margin-top: 8px
+}
+
+.vercel [cmdk-group-heading] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    font-size: 12px;
+    padding: 0 8px;
+    margin-bottom: 8px
+}
+
+.vercel [cmdk-empty],.vercel [cmdk-group-heading] {
+    color: var(--gray11);
+    display: flex;
+    align-items: center
+}
+
+.vercel [cmdk-empty] {
+    font-size: 14px;
+    justify-content: center;
+    height: 48px;
+    white-space: pre-wrap
+}
+
+.linear [cmdk-root] {
+    max-width: 640px;
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 0;
+    font-family: var(--font-sans);
+    box-shadow: var(--cmdk-shadow);
+    outline: none
+}
+
+.dark .linear [cmdk-root] {
+    background: linear-gradient(136.61deg,#27282b 13.72%,#2d2e31 74.3%)
+}
+
+.linear [cmdk-linear-badge] {
+    height: 24px;
+    padding: 0 8px;
+    font-size: 12px;
+    color: var(--gray11);
+    background: var(--gray3);
+    border-radius: 4px;
+    width: -moz-fit-content;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin: 16px 16px 0
+}
+
+.linear [cmdk-linear-shortcuts] {
+    display: flex;
+    margin-left: auto;
+    gap: 8px
+}
+
+.linear [cmdk-linear-shortcuts] kbd {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--gray11)
+}
+
+.linear [cmdk-input] {
+    font-family: var(--font-sans);
+    border: none;
+    width: 100%;
+    font-size: 18px;
+    padding: 20px;
+    outline: none;
+    background: var(--bg);
+    color: var(--gray12);
+    border-bottom: 1px solid var(--gray6);
+    border-radius: 0;
+    caret-color: #6e5ed2;
+    margin: 0
+}
+
+.linear [cmdk-input]::placeholder {
+    color: var(--gray9)
+}
+
+.linear [cmdk-item] {
+    content-visibility: auto;
+    cursor: pointer;
+    height: 48px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    color: var(--gray12);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    will-change: background,color;
+    transition: all .15s ease;
+    transition-property: none;
+    position: relative
+}
+
+.linear [cmdk-item][data-selected=true] {
+    background: var(--gray3)
+}
+
+.linear [cmdk-item][data-selected=true] svg {
+    color: var(--gray12)
+}
+
+.linear [cmdk-item][data-selected=true]:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    z-index: 123;
+    width: 3px;
+    height: 100%;
+    background: #5f6ad2
+}
+
+.linear [cmdk-item][data-disabled=true] {
+    color: var(--gray8);
+    cursor: not-allowed
+}
+
+.linear [cmdk-item]:active {
+    transition-property: background;
+    background: var(--gray4)
+}
+
+.linear [cmdk-item]+[cmdk-item] {
+    margin-top: 4px
+}
+
+.linear [cmdk-item] svg {
+    width: 16px;
+    height: 16px;
+    color: var(--gray10)
+}
+
+.linear [cmdk-list] {
+    height: min(300px,var(--cmdk-list-height));
+    max-height: 400px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    transition: .1s ease;
+    transition-property: height
+}
+
+.linear [cmdk-group-heading] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    font-size: 12px;
+    padding: 0 8px
+}
+
+.linear [cmdk-empty],.linear [cmdk-group-heading] {
+    color: var(--gray11);
+    display: flex;
+    align-items: center
+}
+
+.linear [cmdk-empty] {
+    font-size: 14px;
+    justify-content: center;
+    height: 64px;
+    white-space: pre-wrap
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0;
+        transform: translateX(0)
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateX(100%)
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(0)
+    }
+}
+
+@keyframes shine {
+    to {
+        background-position: 200%;
+        opacity: 0
+    }
+}
+
+@keyframes border {
+    to {
+        box-shadow: 0 0 0 1px var(--gray6)
+    }
+}
+
+@keyframes showTopShine {
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: scale(.96)
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1)
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        opacity: 1;
+        transform: scale(1)
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(.96)
+    }
+}
+
+.framer [cmdk-root] {
+    max-width: 640px;
+    width: 100%;
+    padding: 8px;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    border: 1px solid var(--gray6);
+    box-shadow: var(--cmdk-shadow);
+    outline: none
+}
+
+.dark .framer [cmdk-root] {
+    background: var(--gray2)
+}
+
+.framer [cmdk-framer-header] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 48px;
+    border-bottom: 1px solid var(--gray5);
+    margin-bottom: 12px;
+    padding: 0 8px 8px
+}
+
+.framer [cmdk-framer-header] svg {
+    width: 20px;
+    height: 20px;
+    color: var(--gray9);
+    transform: translateY(1px)
+}
+
+.framer [cmdk-input] {
+    font-family: var(--font-sans);
+    border: none;
+    width: 100%;
+    font-size: 16px;
+    outline: none;
+    background: var(--bg);
+    color: var(--gray12)
+}
+
+.framer [cmdk-input]::placeholder {
+    color: var(--gray9)
+}
+
+.framer [cmdk-item] {
+    content-visibility: auto;
+    cursor: pointer;
+    border-radius: 12px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--gray12);
+    padding: 8px;
+    margin-right: 8px;
+    font-weight: 500;
+    transition: all .15s ease;
+    transition-property: none
+}
+
+.framer [cmdk-item][data-selected=true] {
+    background: var(--blue9);
+    color: #fff
+}
+
+.framer [cmdk-item][data-selected=true] [cmdk-framer-item-subtitle] {
+    color: #fff
+}
+
+.framer [cmdk-item][data-disabled=true] {
+    color: var(--gray8);
+    cursor: not-allowed
+}
+
+.framer [cmdk-item]+[cmdk-item] {
+    margin-top: 4px
+}
+
+.framer [cmdk-item] svg {
+    width: 16px;
+    height: 16px;
+    color: #fff
+}
+
+.framer [cmdk-framer-icon-wrapper] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    background: orange;
+    border-radius: 8px
+}
+
+.framer [cmdk-framer-item-meta] {
+    display: flex;
+    flex-direction: column;
+    gap: 4px
+}
+
+.framer [cmdk-framer-item-subtitle] {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--gray11)
+}
+
+.framer [cmdk-framer-items] {
+    min-height: 308px;
+    display: flex
+}
+
+.framer [cmdk-framer-left] {
+    width: 40%
+}
+
+.framer [cmdk-framer-separator] {
+    width: 1px;
+    border: 0;
+    margin-right: 8px;
+    background: var(--gray6)
+}
+
+.framer [cmdk-framer-right] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-left: 8px;
+    width: 60%
+}
+
+.framer [cmdk-framer-right] button {
+    width: 120px;
+    height: 40px;
+    background: var(--blue9);
+    border-radius: 6px;
+    font-weight: 500;
+    color: #fff;
+    font-size: 14px
+}
+
+.framer [cmdk-framer-right] input[type=text] {
+    height: 40px;
+    width: 160px;
+    border: 1px solid var(--gray6);
+    background: #fff;
+    border-radius: 6px;
+    padding: 0 8px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.08)
+}
+
+.framer [cmdk-framer-right] input[type=text]::placeholder {
+    color: var(--gray9)
+}
+
+@media(prefers-color-scheme: dark) {
+    .framer [cmdk-framer-right] input[type=text] {
+        background:var(--gray3)
+    }
+}
+
+.framer [cmdk-framer-right] [cmdk-framer-radio] {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--gray12);
+    font-weight: 500;
+    font-size: 14px;
+    accent-color: var(--blue9)
+}
+
+.framer [cmdk-framer-right] [cmdk-framer-radio] input {
+    width: 20px;
+    height: 20px
+}
+
+.framer [cmdk-framer-right] img {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    border: 1px solid var(--gray6)
+}
+
+.framer [cmdk-framer-right] [cmdk-framer-container] {
+    width: 100px;
+    height: 100px;
+    background: var(--blue9);
+    border-radius: 16px
+}
+
+.framer [cmdk-framer-right] [cmdk-framer-badge] {
+    background: var(--blue3);
+    padding: 0 8px;
+    height: 28px;
+    font-size: 14px;
+    line-height: 28px;
+    color: var(--blue11);
+    border-radius: 9999px;
+    font-weight: 500
+}
+
+.framer [cmdk-framer-right] [cmdk-framer-slider] {
+    height: 20px;
+    width: 200px;
+    background: linear-gradient(90deg,var(--blue9) 40%,var(--gray3) 0);
+    border-radius: 9999px
+}
+
+.framer [cmdk-framer-right] [cmdk-framer-slider] div {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px -1px rgba(0,0,0,.32);
+    transform: translateX(70px)
+}
+
+.framer [cmdk-list] {
+    overflow: auto
+}
+
+.framer [cmdk-separator] {
+    height: 1px;
+    width: 100%;
+    background: var(--gray5);
+    margin: 4px 0
+}
+
+.framer [cmdk-group-heading] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    font-size: 12px;
+    color: var(--gray11);
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px
+}
+
+.framer [cmdk-empty] {
+    font-size: 14px;
+    padding: 32px;
+    white-space: pre-wrap;
+    color: var(--gray11)
+}
+
+@media(max-width: 640px) {
+    .framer [cmdk-framer-item-subtitle] {
+        display:none
+    }
+}

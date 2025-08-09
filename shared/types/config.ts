@@ -3,6 +3,7 @@ export interface AppConfig {
   icon?: string;
   theme: "dark" | "light";
   defaultService?: string;
+  style?: "raycast" | "vercel" | "linear" | "framer";
 }
 
 // Authentication only works when useProxy is true

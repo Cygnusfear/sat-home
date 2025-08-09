@@ -4,7 +4,8 @@
     "title": "My Home Dashboard",
     "theme": "dark",
     "defaultService": "home",
-    "icon": "/images/logo.png"
+    "icon": "/images/logo.png",
+    "style": "raycast"
   },
   "services": [
     {

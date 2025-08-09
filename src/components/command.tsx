@@ -3,7 +3,6 @@ import * as React from "react";
 import { useNavigate } from "react-router";
 import type { Config, SanitizedService } from "shared/types/config";
 import "../assets/command.css";
-import { cn } from "src/lib/utils";
 
 interface CommandMenuProps {
 	config: Config;
@@ -13,8 +12,7 @@ interface CommandMenuProps {
 
 const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 	const navigate = useNavigate();
-
-	console.log("CommandMenu render, open:", open);
+	const style = config.app.style || "raycast";
 
 	const handleServiceSelect = (service: SanitizedService) => {
 		onOpenChange(false);
@@ -25,6 +23,134 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 		}
 	};
 
+	// Style-specific attributes
+	const getStyleAttributes = (type: string) => {
+		switch (style) {
+			case "raycast":
+				if (type === "loader") return { "cmdk-raycast-loader": "" } as any;
+				if (type === "meta") return { "cmdk-raycast-meta": "" } as any;
+				if (type === "footer") return { "cmdk-raycast-footer": "" } as any;
+				if (type === "trigger") return { "cmdk-raycast-open-trigger": "" } as any;
+				break;
+			case "vercel":
+				if (type === "meta") return { "cmdk-vercel-badge": "" } as any;
+				if (type === "shortcuts") return { "cmdk-vercel-shortcuts": "" } as any;
+				break;
+			case "linear":
+				if (type === "meta") return { "cmdk-linear-badge": "" } as any;
+				if (type === "shortcuts") return { "cmdk-linear-shortcuts": "" } as any;
+				break;
+			case "framer":
+				if (type === "meta") return { "cmdk-framer-item-subtitle": "" } as any;
+				if (type === "icon") return { "cmdk-framer-icon-wrapper": "" } as any;
+				break;
+		}
+		return {};
+	};
+
+	// Render loader based on style
+	const renderLoader = () => {
+		if (style === "raycast") {
+			return <hr {...getStyleAttributes("loader")} />;
+		}
+		return null;
+	};
+
+	// Render footer based on style
+	const renderFooter = () => {
+		if (style === "raycast") {
+			return (
+				<div
+					{...getStyleAttributes("footer")}
+					className="flex flex-row gap-2 justify-end"
+				>
+					<button {...getStyleAttributes("trigger")}>
+						<kbd>↵</kbd>
+						<span>Open</span>
+					</button>
+					<hr />
+					<button {...getStyleAttributes("trigger")}>
+						<kbd>↑</kbd>
+						<kbd>↓</kbd>
+						<span>Navigate</span>
+					</button>
+				</div>
+			);
+		} else if (style === "vercel" || style === "linear") {
+			// These styles don't have a footer
+			return null;
+		} else if (style === "framer") {
+			// Framer has a different structure
+			return null;
+		}
+		return null;
+	};
+
+	// Render tags/meta based on style
+	const renderMeta = (service: SanitizedService) => {
+		if (!service.tags || service.tags.length === 0) return null;
+		
+		const tags = service.tags.join(", ").toLowerCase();
+		
+		if (style === "raycast") {
+			return (
+				<span {...getStyleAttributes("meta")}>
+					{tags}
+				</span>
+			);
+		} else if (style === "vercel") {
+			// Vercel uses badges differently
+			return (
+				<div {...getStyleAttributes("shortcuts")}>
+					<span {...getStyleAttributes("meta")}>
+						{tags}
+					</span>
+				</div>
+			);
+		} else if (style === "linear") {
+			// Linear has its own badge style
+			return (
+				<div {...getStyleAttributes("shortcuts")}>
+					{tags}
+				</div>
+			);
+		} else if (style === "framer") {
+			// Framer uses subtitle
+			return (
+				<span {...getStyleAttributes("meta")}>
+					{tags}
+				</span>
+			);
+		}
+		return <span>{tags}</span>;
+	};
+
+	// Render icon based on style
+	const renderIcon = (service: SanitizedService) => {
+		if (!service.icon) return null;
+
+		const iconElement = (service.icon.startsWith("/") || service.icon.startsWith("http")) ? (
+			<img
+				src={service.icon}
+				alt=""
+				style={{ width: "18px", height: "18px" }}
+			/>
+		) : (
+			<span>{service.icon}</span>
+		);
+
+		if (style === "framer") {
+			// Framer wraps icons
+			return (
+				<div {...getStyleAttributes("icon")}>
+					{iconElement}
+				</div>
+			);
+		}
+		
+		return iconElement;
+	};
+
 	return (
 		<Command.Dialog
 			open={open}
@@ -32,7 +158,7 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 			label="Global Command Menu"
 		>
 			<Command.Input autoFocus placeholder="Search services..." />
-			<hr {...({ "cmdk-raycast-loader": "" } as any)} />
+			{renderLoader()}
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
 
@@ -51,23 +177,9 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 								value={searchValue}
 								onSelect={() => handleServiceSelect(service)}
 							>
-								{service.icon &&
-									(service.icon.startsWith("/") ||
-									service.icon.startsWith("http") ? (
-										<img
-											src={service.icon}
-											alt=""
-											style={{ width: "18px", height: "18px" }}
-										/>
-									) : (
-										<span>{service.icon}</span>
-									))}
+								{renderIcon(service)}
 								<span>{service.name}</span>
-								{service.tags && service.tags.length > 0 && (
-									<span {...({ "cmdk-raycast-meta": "" } as any)}>
-										{service.tags.join(", ").toLowerCase()}
-									</span>
-								)}
+								{renderMeta(service)}
 							</Command.Item>
 						);
 					})}
@@ -85,29 +197,16 @@ const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 					>
 						<span>🏠</span>
 						<span>Go Home</span>
-						<span {...({ "cmdk-raycast-meta": "" } as any)}>
-							return to dashboard
-						</span>
+						{style === "raycast" && (
+							<span {...getStyleAttributes("meta")}>
+								return to dashboard
+							</span>
+						)}
 					</Command.Item>
 				</Command.Group>
 			</Command.List>
 
-			<div
-				{...({ "cmdk-raycast-footer": "" } as any)}
-				className="flex flex-row gap-2 justify-end"
-			>
-				<button {...({ "cmdk-raycast-open-trigger": "" } as any)}>
-					<kbd>↵</kbd>
-					<span>Open</span>
-				</button>
-
-				<hr />
-				<button {...({ "cmdk-raycast-open-trigger": "" } as any)}>
-					<kbd>↑</kbd>
-					<kbd>↓</kbd>
-					<span>Navigate</span>
-				</button>
-			</div>
+			{renderFooter()}
 		</Command.Dialog>
 	);
 };

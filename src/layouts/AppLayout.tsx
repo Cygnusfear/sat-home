@@ -39,6 +39,13 @@ export default function AppLayout() {
 				console.log("Config loaded:", data);
 				setConfig(data);
 				setLoading(false);
+				const html = document.getElementsByTagName("html")[0];
+				// Add style class
+				html.classList.add(data.app.style || "raycast");
+				// Add theme class for dark mode styles
+				if (data.app.theme === "dark") {
+					html.classList.add("dark");
+				}
 			})
 			.catch((err) => {
 				if (err.name !== "AbortError") {
@@ -86,7 +93,7 @@ export default function AppLayout() {
 			onToggleSidebar={() => setSidebarCollapsed((prev) => !prev)}
 			onOpenCommand={() => setCommandOpen((prev) => !prev)}
 		>
-			<div className="flex h-screen w-screen linear">
+			<div className="flex h-screen w-screen">
 				<Sidebar
 					services={config.services}
 					app={config.app}
