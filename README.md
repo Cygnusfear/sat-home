@@ -101,41 +101,48 @@ Your dashboard will be available at `http://localhost:5173`
 | `openInNewTab` | boolean | Open in new tab instead of iframe |
 | `useProxy` | boolean | Route through backend proxy |
 
-### Authentication Types
+### Authentication
 
-The dashboard supports multiple authentication methods:
+Authentication headers are injected when `useProxy: true` is enabled. For direct iframe loading (default), services handle authentication through cookies or SSO.
+
+#### Supported Authentication Types
 
 ```json
 // No authentication
 { "type": "none" }
 
-// Form-based login
+// Basic Authentication (requires useProxy: true)
 {
-  "type": "forms",
+  "type": "basic",
   "username": "admin",
   "password": "password"
 }
 
-// API Key
+// API Key (requires useProxy: true)
 {
   "type": "apikey",
   "header": "X-API-Key",
   "value": "your-api-key"
 }
 
-// Bearer Token
+// Bearer Token (requires useProxy: true)
 {
   "type": "bearer",
   "value": "your-token"
 }
 
-// Basic Authentication
+// Form-based Login (requires useProxy: true)
 {
-  "type": "basic",
+  "type": "forms",
   "username": "admin",
   "password": "password"
 }
 ```
+
+**Notes:**
+- Services behind a reverse proxy with SSO typically use `"type": "none"`
+- Enable `useProxy: true` when authentication headers are required
+- Form-based authentication stores cookies for session persistence
 
 ## Docker Deployment
 

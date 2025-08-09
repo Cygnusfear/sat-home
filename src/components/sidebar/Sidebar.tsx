@@ -12,6 +12,7 @@ interface SidebarProps {
 
 export function Sidebar({
 	services,
+	app,
 	collapsed = false,
 	onToggleCollapsed,
 }: SidebarProps) {
@@ -44,7 +45,7 @@ export function Sidebar({
 					onClick={onToggleCollapsed}
 				>
 					<img
-						src={"/images/a.png"}
+						src={app.icon}
 						className="h-6 w-6 flex-shrink-0"
 						alt={"Toggle Sidebar"}
 					/>

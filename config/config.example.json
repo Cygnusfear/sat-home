@@ -1,4 +1,5 @@
 {
+  "// Authentication Note": "Most services use 'none' because they're behind a reverse proxy with SSO. Only use auth with useProxy:true when necessary (like SABnzbd)",
   "app": {
     "title": "My Home Dashboard",
     "theme": "dark",
@@ -11,12 +12,25 @@
       "name": "Jellyfin",
       "url": "https://jellyfin.example.com",
       "icon": "/images/jellyfin.png",
-      "description": "Media server for movies and TV",
+      "description": "Media server",
       "auth": {
         "type": "none"
       },
       "tags": ["media", "streaming"],
       "order": 1
+    },
+    {
+      "id": "portainer",
+      "name": "Portainer",
+      "url": "https://portainer.example.com",
+      "icon": "/images/portainer.png",
+      "description": "Docker management",
+      "auth": {
+        "type": "none"
+      },
+      "tags": ["infrastructure", "docker"],
+      "order": 2,
+      "openInNewTab": true
     },
     {
       "id": "radarr",
@@ -25,12 +39,10 @@
       "icon": "/images/radarr.png",
       "description": "Movie collection manager",
       "auth": {
-        "type": "forms",
-        "username": "admin",
-        "password": "YOUR_PASSWORD_HERE"
+        "type": "none"
       },
       "tags": ["media", "downloads"],
-      "order": 2
+      "order": 3
     },
     {
       "id": "sonarr",
@@ -39,38 +51,36 @@
       "icon": "/images/sonarr.png",
       "description": "TV show collection manager",
       "auth": {
-        "type": "forms",
-        "username": "admin",
-        "password": "YOUR_PASSWORD_HERE"
+        "type": "none"
       },
       "tags": ["media", "downloads"],
-      "order": 2
+      "order": 3
     },
     {
-      "id": "portainer",
-      "name": "Portainer",
-      "url": "https://portainer.example.com",
-      "icon": "/images/portainer.png",
-      "description": "Docker container management",
+      "// SABnzbd Note": "Uses proxy to handle iframe restrictions",
+      "id": "sabnzbd",
+      "name": "SABnzbd",
+      "url": "https://sabnzbd.example.com",
+      "icon": "/images/sabnzbd.png",
+      "description": "Usenet downloader",
       "auth": {
         "type": "none"
       },
-      "tags": ["infrastructure", "docker"],
-      "order": 3,
-      "openInNewTab": true
+      "tags": ["downloads", "usenet"],
+      "order": 4,
+      "useProxy": true
     },
     {
       "id": "grafana",
       "name": "Grafana",
       "url": "https://grafana.example.com",
       "icon": "/images/grafana.png",
-      "description": "Metrics and monitoring dashboards",
+      "description": "Metrics and monitoring",
       "auth": {
         "type": "none"
       },
       "tags": ["monitoring", "infrastructure"],
-      "order": 4,
-      "openInNewTab": true
+      "order": 5
     },
     {
       "id": "homeassistant",
@@ -79,26 +89,10 @@
       "icon": "/images/homeassistant.png",
       "description": "Smart home automation",
       "auth": {
-        "type": "bearer",
-        "value": "YOUR_HA_LONG_LIVED_TOKEN_HERE"
+        "type": "none"
       },
       "tags": ["home", "automation", "iot"],
-      "order": 5
-    },
-    {
-      "id": "sabnzbd",
-      "name": "SABnzbd",
-      "url": "https://sabnzbd.example.com",
-      "icon": "/images/sabnzbd.png",
-      "description": "Usenet downloader",
-      "auth": {
-        "type": "apikey",
-        "header": "X-API-Key",
-        "value": "YOUR_API_KEY_HERE"
-      },
-      "tags": ["downloads", "usenet"],
-      "order": 6,
-      "useProxy": true
+      "order": 6
     },
     {
       "id": "pihole",
@@ -111,21 +105,6 @@
       },
       "tags": ["network", "security", "dns"],
       "order": 7
-    },
-    {
-      "id": "traefik",
-      "name": "Traefik",
-      "url": "https://traefik.example.com",
-      "icon": "/images/traefik.png",
-      "description": "Reverse proxy and load balancer",
-      "auth": {
-        "type": "basic",
-        "username": "admin",
-        "password": "YOUR_PASSWORD_HERE"
-      },
-      "tags": ["infrastructure", "networking", "proxy"],
-      "order": 8,
-      "openInNewTab": false
     }
   ]
 }

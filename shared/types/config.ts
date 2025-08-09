@@ -5,6 +5,8 @@ export interface AppConfig {
   defaultService?: string;
 }
 
+// Authentication only works when useProxy is true
+// For direct iframe loading, services must handle their own auth
 export interface ServiceAuth {
   type: "none" | "basic" | "apikey" | "bearer" | "forms";
   username?: string;
