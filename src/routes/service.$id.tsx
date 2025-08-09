@@ -65,6 +65,7 @@ export default function ServicePage() {
 			serviceId={service.id}
 			serviceName={service.name}
 			serviceUrl={service.url}
+			useProxy={service.useProxy}
 		/>
 	);
 }

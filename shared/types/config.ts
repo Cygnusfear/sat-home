@@ -23,6 +23,7 @@ export interface Service {
   tags?: string[];
   order?: number;
   openInNewTab?: boolean;
+  useProxy?: boolean;
 }
 
 export interface Config {
@@ -35,4 +36,5 @@ export interface SanitizedService extends Omit<Service, "auth"> {
     type: ServiceAuth["type"];
   };
   openInNewTab?: boolean;
+  useProxy?: boolean;
 }

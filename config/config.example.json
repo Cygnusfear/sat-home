@@ -56,7 +56,8 @@
       },
       "tags": ["infrastructure"],
       "order": 4,
-      "openInNewTab": true
+      "openInNewTab": true,
+      "useProxy": false
     },
     {
       "id": "homeassistant",

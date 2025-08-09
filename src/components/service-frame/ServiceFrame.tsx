@@ -4,19 +4,21 @@ interface ServiceFrameProps {
 	serviceId: string;
 	serviceName: string;
 	serviceUrl: string;
+	useProxy?: boolean;
 }
 
 export function ServiceFrame({
 	serviceId,
 	serviceName,
 	serviceUrl,
+	useProxy = false,
 }: ServiceFrameProps) {
 	const iframeRef = useRef<HTMLIFrameElement>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	// Use direct service URL - no proxy needed
-	const iframeUrl = serviceUrl;
+	// Use proxy URL if configured, otherwise direct URL
+	const iframeUrl = useProxy ? `/api/proxy/${serviceId}/` : serviceUrl;
 
 	useEffect(() => {
 		setLoading(true);

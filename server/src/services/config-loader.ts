@@ -107,6 +107,7 @@ class ConfigLoader {
         tags: service.tags,
         order: service.order,
         openInNewTab: service.openInNewTab,
+        useProxy: service.useProxy,
         auth: {
           type: service.auth.type,
         },
