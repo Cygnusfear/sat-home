@@ -1,12 +1,15 @@
-import { useHotkeys } from "reakeys";
 import { useEffect } from "react";
+import { useHotkeys } from "reakeys";
 
 interface KeyboardHandlerProps {
 	onToggleSidebar: () => void;
 	onOpenCommand: () => void;
 }
 
-export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHandlerProps) {
+export function KeyboardHandler({
+	onToggleSidebar,
+	onOpenCommand,
+}: KeyboardHandlerProps) {
 	// Use reakeys for robust keyboard handling
 	useHotkeys([
 		{
@@ -28,7 +31,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 		// Also support ctrl for non-Mac users
 		{
 			name: "Toggle Sidebar (Ctrl)",
-			keys: "control+b",
+			keys: "ctrl+b",
 			callback: (e) => {
 				e?.preventDefault();
 				onToggleSidebar();
@@ -36,7 +39,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 		},
 		{
 			name: "Open Command Palette (Ctrl)",
-			keys: "control+k",
+			keys: "ctrl+k",
 			callback: (e) => {
 				e?.preventDefault();
 				onOpenCommand();
@@ -59,7 +62,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 
 		// Add to window to catch before any other handlers
 		window.addEventListener("keydown", preventDefaults, true);
-		
+
 		return () => {
 			window.removeEventListener("keydown", preventDefaults, true);
 		};
