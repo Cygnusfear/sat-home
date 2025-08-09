@@ -1,6 +1,7 @@
 # ⛩️ Satsang
+A hyper-lightweight, self-hosted dashboard for managing services.
 
-A lightweight, self-hosted dashboard for managing and accessing your home lab services through a unified interface. Built with React Router v7, TypeScript, and Bun.
+<p align="center" style="margin:auto; width: 452px"><img width="452" alt="Screenshot 2025-08-09 at 09 37 42" src="https://github.com/user-attachments/assets/d6a8442c-27b3-4821-b05e-d2665fb1f1c7" /></p>
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)
