@@ -11,7 +11,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 	useHotkeys([
 		{
 			name: "Toggle Sidebar",
-			keys: "cmd+b",
+			keys: "meta+b",
 			callback: (e) => {
 				e?.preventDefault();
 				onToggleSidebar();
@@ -19,7 +19,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 		},
 		{
 			name: "Open Command Palette",
-			keys: "cmd+k",
+			keys: "meta+k",
 			callback: (e) => {
 				e?.preventDefault();
 				onOpenCommand();
@@ -28,7 +28,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 		// Also support ctrl for non-Mac users
 		{
 			name: "Toggle Sidebar (Ctrl)",
-			keys: "ctrl+b",
+			keys: "control+b",
 			callback: (e) => {
 				e?.preventDefault();
 				onToggleSidebar();
@@ -36,7 +36,7 @@ export function KeyboardHandler({ onToggleSidebar, onOpenCommand }: KeyboardHand
 		},
 		{
 			name: "Open Command Palette (Ctrl)",
-			keys: "ctrl+k",
+			keys: "control+k",
 			callback: (e) => {
 				e?.preventDefault();
 				onOpenCommand();
