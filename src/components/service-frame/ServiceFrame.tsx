@@ -3,15 +3,16 @@ import { useEffect, useRef, useState } from "react";
 interface ServiceFrameProps {
   serviceId: string;
   serviceName: string;
+  serviceUrl: string;
 }
 
-export function ServiceFrame({ serviceId, serviceName }: ServiceFrameProps) {
+export function ServiceFrame({ serviceId, serviceName, serviceUrl }: ServiceFrameProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Use relative URL - works with Vite proxy in dev, Traefik in production
-  const proxyUrl = `/api/proxy/${serviceId}/`;
+  // Use direct service URL - no proxy needed
+  const iframeUrl = serviceUrl;
 
   useEffect(() => {
     setLoading(true);
@@ -48,7 +49,7 @@ export function ServiceFrame({ serviceId, serviceName }: ServiceFrameProps) {
                 setError(null);
                 setLoading(true);
                 if (iframeRef.current) {
-                  iframeRef.current.src = proxyUrl;
+                  iframeRef.current.src = iframeUrl;
                 }
               }}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -61,12 +62,13 @@ export function ServiceFrame({ serviceId, serviceName }: ServiceFrameProps) {
 
       <iframe
         ref={iframeRef}
-        src={proxyUrl}
+        src={iframeUrl}
         className={`w-full h-full border-0 ${loading || error ? "invisible" : ""}`}
         onLoad={handleLoad}
         onError={handleError}
         title={serviceName}
-        sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads"
+        // Remove sandbox to allow all features
+        allow="fullscreen"
       />
     </div>
   );

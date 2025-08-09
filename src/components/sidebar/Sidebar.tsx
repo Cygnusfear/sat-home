@@ -30,7 +30,7 @@ export function Sidebar({ services, app }: SidebarProps) {
 						return (
 							<a
 								key={service.id}
-								href={`/api/proxy/${service.id}/`}
+								href={service.url}
 								target="_blank"
 								rel="noopener noreferrer"
 								className={cn(

@@ -106,6 +106,7 @@ class ConfigLoader {
         description: service.description,
         tags: service.tags,
         order: service.order,
+        openInNewTab: service.openInNewTab,
         auth: {
           type: service.auth.type,
         },

@@ -58,5 +58,5 @@ export default function ServicePage() {
 		);
 	}
 
-	return <ServiceFrame serviceId={service.id} serviceName={service.name} />;
+	return <ServiceFrame serviceId={service.id} serviceName={service.name} serviceUrl={service.url} />;
 }
