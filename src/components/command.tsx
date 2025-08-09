@@ -6,20 +6,17 @@ import "../assets/command.css";
 
 interface CommandMenuProps {
 	config: Config;
-	open?: boolean;
-	onOpenChange?: (open: boolean) => void;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
 }
 
-const CommandMenu = ({ config, open: controlledOpen, onOpenChange }: CommandMenuProps) => {
-	const [internalOpen, setInternalOpen] = React.useState(false);
+const CommandMenu = ({ config, open, onOpenChange }: CommandMenuProps) => {
 	const navigate = useNavigate();
-	
-	// Use controlled or internal state
-	const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
-	const setOpen = onOpenChange || setInternalOpen;
+
+	console.log("CommandMenu render, open:", open);
 
 	const handleServiceSelect = (service: SanitizedService) => {
-		setOpen(false);
+		onOpenChange(false);
 		if (service.openInNewTab) {
 			window.open(service.url, "_blank");
 		} else {
@@ -30,11 +27,9 @@ const CommandMenu = ({ config, open: controlledOpen, onOpenChange }: CommandMenu
 	return (
 		<Command.Dialog
 			open={open}
-			onOpenChange={setOpen}
+			onOpenChange={onOpenChange}
 			label="Global Command Menu"
-			className="min-w-140"
 		>
-			<div {...({ "cmdk-raycast-top-shine": "" } as any)} />
 			<Command.Input autoFocus placeholder="Search services..." />
 			<hr {...({ "cmdk-raycast-loader": "" } as any)} />
 			<Command.List>
@@ -74,7 +69,7 @@ const CommandMenu = ({ config, open: controlledOpen, onOpenChange }: CommandMenu
 					<Command.Item
 						value="home dashboard"
 						onSelect={() => {
-							setOpen(false);
+							onOpenChange(false);
 							navigate("/");
 						}}
 					>
@@ -87,7 +82,10 @@ const CommandMenu = ({ config, open: controlledOpen, onOpenChange }: CommandMenu
 				</Command.Group>
 			</Command.List>
 
-			<div {...({ "cmdk-raycast-footer": "" } as any)}>
+			<div
+				{...({ "cmdk-raycast-footer": "" } as any)}
+				className="flex flex-row gap-2 justify-end"
+			>
 				<button {...({ "cmdk-raycast-open-trigger": "" } as any)}>
 					<kbd>↵</kbd>
 					<span>Open</span>

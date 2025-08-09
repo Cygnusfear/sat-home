@@ -45,6 +45,7 @@
 }
 
 .raycast [cmdk-root] {
+    @apply min-w-140;
     max-width: 640px;
     width: 100%;
     background: var(--gray1);

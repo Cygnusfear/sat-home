@@ -5,9 +5,10 @@ import { ServiceFrame } from "../service-frame/ServiceFrame";
 
 interface ServiceManagerProps {
 	services: SanitizedService[];
+	onKeyboardShortcut?: (key: string, metaKey: boolean) => void;
 }
 
-export function ServiceManager({ services }: ServiceManagerProps) {
+export function ServiceManager({ services, onKeyboardShortcut }: ServiceManagerProps) {
 	const params = useParams();
 	const location = useLocation();
 	const [loadedServices, setLoadedServices] = useState<Set<string>>(new Set());
@@ -32,7 +33,7 @@ export function ServiceManager({ services }: ServiceManagerProps) {
 	const iframeServices = services.filter(s => !s.openInNewTab);
 
 	return (
-		<div className="absolute inset-0 w-full h-full">
+		<div className="relative w-full h-full">
 			{iframeServices.map((service) => {
 				const isActive = service.id === id;
 				const hasBeenLoaded = loadedServices.has(service.id);
@@ -46,7 +47,7 @@ export function ServiceManager({ services }: ServiceManagerProps) {
 					<div
 						key={service.id}
 						className={`absolute inset-0 w-full h-full ${
-							isActive ? "z-10" : "z-0 invisible"
+							isActive ? "block" : "hidden"
 						}`}
 					>
 						<ServiceFrame
@@ -54,6 +55,7 @@ export function ServiceManager({ services }: ServiceManagerProps) {
 							serviceName={service.name}
 							serviceUrl={service.url}
 							useProxy={service.useProxy}
+							onKeyboardShortcut={onKeyboardShortcut}
 						/>
 					</div>
 				);

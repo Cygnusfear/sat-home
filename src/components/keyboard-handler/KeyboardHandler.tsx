@@ -10,63 +10,33 @@ export function KeyboardHandler({
 	onToggleSidebar,
 	onOpenCommand,
 }: KeyboardHandlerProps) {
-	// Use reakeys for robust keyboard handling
+	// Keep reakeys for sidebar since it's working
 	useHotkeys([
 		{
 			name: "Toggle Sidebar",
-			keys: "meta+b",
+			keys: "MOD+B",
 			callback: (e) => {
 				e?.preventDefault();
 				onToggleSidebar();
-			},
-		},
-		{
-			name: "Open Command Palette",
-			keys: "meta+k",
-			callback: (e) => {
-				e?.preventDefault();
-				onOpenCommand();
-			},
-		},
-		// Also support ctrl for non-Mac users
-		{
-			name: "Toggle Sidebar (Ctrl)",
-			keys: "ctrl+b",
-			callback: (e) => {
-				e?.preventDefault();
-				onToggleSidebar();
-			},
-		},
-		{
-			name: "Open Command Palette (Ctrl)",
-			keys: "ctrl+k",
-			callback: (e) => {
-				e?.preventDefault();
-				onOpenCommand();
 			},
 		},
 	]);
 
-	// Prevent default browser behavior for these shortcuts
+	// Add manual binding for command palette
 	useEffect(() => {
-		const preventDefaults = (e: KeyboardEvent) => {
-			// Check for Cmd+K or Ctrl+K
+		const handleKeyDown = (e: KeyboardEvent) => {
 			if ((e.metaKey || e.ctrlKey) && e.key === "k") {
 				e.preventDefault();
-			}
-			// Check for Cmd+B or Ctrl+B
-			if ((e.metaKey || e.ctrlKey) && e.key === "b") {
-				e.preventDefault();
+				onOpenCommand();
 			}
 		};
 
-		// Add to window to catch before any other handlers
-		window.addEventListener("keydown", preventDefaults, true);
-
+		window.addEventListener("keydown", handleKeyDown, true);
+		
 		return () => {
-			window.removeEventListener("keydown", preventDefaults, true);
+			window.removeEventListener("keydown", handleKeyDown, true);
 		};
-	}, []);
+	}, [onOpenCommand]);
 
 	return null;
 }

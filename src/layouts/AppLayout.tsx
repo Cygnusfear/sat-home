@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import CommandMenu from "src/components/command";
 import type { Config, SanitizedService } from "../../shared/types/config";
-import { Sidebar } from "../components/sidebar/Sidebar";
+import { KeyboardInterceptor } from "../components/keyboard-interceptor/KeyboardInterceptor";
 import { ServiceManager } from "../components/service-manager/ServiceManager";
-import { KeyboardHandler } from "../components/keyboard-handler/KeyboardHandler";
+import { Sidebar } from "../components/sidebar/Sidebar";
 import "../assets/command.css";
 
 interface SanitizedConfig {
@@ -82,27 +82,37 @@ export default function AppLayout() {
 	}
 
 	return (
-		<>
-			<KeyboardHandler 
-				onToggleSidebar={() => setSidebarCollapsed(prev => !prev)}
-				onOpenCommand={() => setCommandOpen(true)}
-			/>
+		<KeyboardInterceptor
+			onToggleSidebar={() => setSidebarCollapsed((prev) => !prev)}
+			onOpenCommand={() => setCommandOpen((prev) => !prev)}
+		>
 			<div className="flex h-screen w-screen linear">
-				<Sidebar 
-					services={config.services} 
-					app={config.app} 
+				<Sidebar
+					services={config.services}
+					app={config.app}
 					collapsed={sidebarCollapsed}
 				/>
-				<main className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? 'ml-0' : 'ml-12'}`}>
+				<main
+					className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? "ml-0" : "ml-12"}`}
+				>
 					<Outlet context={{ config }} />
-					<ServiceManager services={config.services} />
+					<ServiceManager 
+						services={config.services}
+						onKeyboardShortcut={(key, metaKey) => {
+							if (key === "k") {
+								setCommandOpen((prev) => !prev);
+							} else if (key === "b") {
+								setSidebarCollapsed((prev) => !prev);
+							}
+						}}
+					/>
 				</main>
 			</div>
-			<CommandMenu 
-				config={config} 
+			<CommandMenu
+				config={config}
 				open={commandOpen}
 				onOpenChange={setCommandOpen}
 			/>
-		</>
+		</KeyboardInterceptor>
 	);
 }
