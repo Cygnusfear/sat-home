@@ -7,15 +7,10 @@ A lightweight, self-hosted dashboard for managing and accessing your home lab se
 
 ## Features
 
-- 🖼️ **Iframe Integration** - Access services directly within the dashboard without switching tabs
-- 🔍 **Smart Search** - Command palette (Cmd+K) with tag-based filtering
-- ⌨️ **Keyboard Shortcuts** - Quick navigation with Cmd+K (search) and Cmd+B (sidebar toggle)
-- 🎯 **State Preservation** - Iframes maintain their state when switching between services
-- 🔐 **Multiple Auth Types** - Support for various authentication methods
-- 🏷️ **Tag System** - Organize and search services by categories
-- 📱 **Responsive Design** - Clean, modern interface that works on all devices
-- 🚀 **Fast & Lightweight** - Built with Bun and optimized for performance
-- 🐳 **Docker Ready** - Easy deployment with Docker and docker-compose
+- 🖼️ **Iframe Integration** - Access all your services directly within the dashboard without switching tabs
+- 🔍 **Smart Command Palette** - Quick search with Cmd+K, filter by service names or tags
+- 🎯 **Persistent State** - Services maintain their state when switching between them (no reloading)
+- 🐳 **Docker Ready** - Simple deployment with volume mounts for config and icons
 
 ## Getting Started
 
