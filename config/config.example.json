@@ -1,76 +1,131 @@
 {
   "app": {
-    "title": "Satsang Home",
+    "title": "My Home Dashboard",
     "theme": "dark",
-    "defaultService": "home"
+    "defaultService": "home",
+    "icon": "/images/logo.png"
   },
   "services": [
     {
-      "id": "sonarr",
-      "name": "Sonarr",
-      "url": "http://localhost:8989",
-      "icon": "📺",
-      "description": "TV Show management",
+      "id": "jellyfin",
+      "name": "Jellyfin",
+      "url": "https://jellyfin.example.com",
+      "icon": "/images/jellyfin.png",
+      "description": "Media server for movies and TV",
       "auth": {
-        "type": "forms",
-        "username": "your-sonarr-username",
-        "password": "your-sonarr-password"
+        "type": "none"
       },
-      "tags": ["media", "tv"],
+      "tags": ["media", "streaming"],
       "order": 1
     },
     {
       "id": "radarr",
       "name": "Radarr",
-      "url": "http://localhost:7878",
+      "url": "https://radarr.example.com",
       "icon": "🎬",
-      "description": "Movie management",
+      "description": "Movie collection manager",
       "auth": {
         "type": "forms",
-        "username": "your-radarr-username",
-        "password": "your-radarr-password"
+        "username": "admin",
+        "password": "YOUR_PASSWORD_HERE"
       },
-      "tags": ["media", "movies"],
+      "tags": ["media", "downloads"],
       "order": 2
     },
     {
-      "id": "plex",
-      "name": "Plex",
-      "url": "http://localhost:32400/web",
-      "icon": "🎭",
-      "description": "Media server",
+      "id": "sonarr",
+      "name": "Sonarr",
+      "url": "https://sonarr.example.com",
+      "icon": "📺",
+      "description": "TV show collection manager",
       "auth": {
-        "type": "none"
+        "type": "forms",
+        "username": "admin",
+        "password": "YOUR_PASSWORD_HERE"
       },
-      "tags": ["media", "streaming"],
-      "order": 3
+      "tags": ["media", "downloads"],
+      "order": 2
     },
     {
       "id": "portainer",
       "name": "Portainer",
-      "url": "http://localhost:9000",
-      "icon": "🐳",
-      "description": "Docker management",
+      "url": "https://portainer.example.com",
+      "icon": "/images/portainer.png",
+      "description": "Docker container management",
       "auth": {
         "type": "none"
       },
-      "tags": ["infrastructure"],
+      "tags": ["infrastructure", "docker"],
+      "order": 3,
+      "openInNewTab": true
+    },
+    {
+      "id": "grafana",
+      "name": "Grafana",
+      "url": "https://grafana.example.com",
+      "icon": "/images/grafana.png",
+      "description": "Metrics and monitoring dashboards",
+      "auth": {
+        "type": "none"
+      },
+      "tags": ["monitoring", "infrastructure"],
       "order": 4,
-      "openInNewTab": true,
-      "useProxy": false
+      "openInNewTab": true
     },
     {
       "id": "homeassistant",
       "name": "Home Assistant",
-      "url": "http://localhost:8123",
+      "url": "https://homeassistant.example.com",
       "icon": "🏠",
-      "description": "Home automation",
+      "description": "Smart home automation",
       "auth": {
         "type": "bearer",
-        "value": "your-home-assistant-token"
+        "value": "YOUR_HA_LONG_LIVED_TOKEN_HERE"
       },
-      "tags": ["automation"],
+      "tags": ["home", "automation", "iot"],
       "order": 5
+    },
+    {
+      "id": "sabnzbd",
+      "name": "SABnzbd",
+      "url": "https://sabnzbd.example.com",
+      "icon": "/images/sabnzbd.png",
+      "description": "Usenet downloader",
+      "auth": {
+        "type": "apikey",
+        "header": "X-API-Key",
+        "value": "YOUR_API_KEY_HERE"
+      },
+      "tags": ["downloads", "usenet"],
+      "order": 6,
+      "useProxy": true
+    },
+    {
+      "id": "pihole",
+      "name": "Pi-hole",
+      "url": "https://pihole.example.com/admin",
+      "icon": "🛡️",
+      "description": "Network-wide ad blocking",
+      "auth": {
+        "type": "none"
+      },
+      "tags": ["network", "security", "dns"],
+      "order": 7
+    },
+    {
+      "id": "traefik",
+      "name": "Traefik",
+      "url": "https://traefik.example.com",
+      "icon": "/images/traefik.png",
+      "description": "Reverse proxy and load balancer",
+      "auth": {
+        "type": "basic",
+        "username": "admin",
+        "password": "YOUR_PASSWORD_HERE"
+      },
+      "tags": ["infrastructure", "networking", "proxy"],
+      "order": 8,
+      "openInNewTab": false
     }
   ]
 }
