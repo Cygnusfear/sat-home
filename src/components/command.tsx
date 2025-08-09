@@ -4,22 +4,19 @@ import { useNavigate } from "react-router";
 import type { Config, SanitizedService } from "shared/types/config";
 import "../assets/command.css";
 
-const CommandMenu = ({ config }: { config: Config }) => {
-	const [open, setOpen] = React.useState(false);
+interface CommandMenuProps {
+	config: Config;
+	open?: boolean;
+	onOpenChange?: (open: boolean) => void;
+}
+
+const CommandMenu = ({ config, open: controlledOpen, onOpenChange }: CommandMenuProps) => {
+	const [internalOpen, setInternalOpen] = React.useState(false);
 	const navigate = useNavigate();
-
-	// Toggle the menu when ⌘K is pressed
-	React.useEffect(() => {
-		const down = (e: KeyboardEvent) => {
-			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-				e.preventDefault();
-				setOpen((open) => !open);
-			}
-		};
-
-		document.addEventListener("keydown", down);
-		return () => document.removeEventListener("keydown", down);
-	}, []);
+	
+	// Use controlled or internal state
+	const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+	const setOpen = onOpenChange || setInternalOpen;
 
 	const handleServiceSelect = (service: SanitizedService) => {
 		setOpen(false);

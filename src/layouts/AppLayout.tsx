@@ -4,6 +4,7 @@ import CommandMenu from "src/components/command";
 import type { Config, SanitizedService } from "../../shared/types/config";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import { ServiceManager } from "../components/service-manager/ServiceManager";
+import { KeyboardHandler } from "../components/keyboard-handler/KeyboardHandler";
 import "../assets/command.css";
 
 interface SanitizedConfig {
@@ -17,19 +18,7 @@ export default function AppLayout() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
-	// Toggle sidebar with CMD+B
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
-				e.preventDefault();
-				setSidebarCollapsed(prev => !prev);
-			}
-		};
-
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, []);
+	const [commandOpen, setCommandOpen] = useState(false);
 
 	useEffect(() => {
 		console.log("AppLayout useEffect running!");
@@ -94,6 +83,10 @@ export default function AppLayout() {
 
 	return (
 		<>
+			<KeyboardHandler 
+				onToggleSidebar={() => setSidebarCollapsed(prev => !prev)}
+				onOpenCommand={() => setCommandOpen(true)}
+			/>
 			<div className="flex h-screen w-screen linear">
 				<Sidebar 
 					services={config.services} 
@@ -105,7 +98,11 @@ export default function AppLayout() {
 					<ServiceManager services={config.services} />
 				</main>
 			</div>
-			<CommandMenu config={config} />
+			<CommandMenu 
+				config={config} 
+				open={commandOpen}
+				onOpenChange={setCommandOpen}
+			/>
 		</>
 	);
 }
