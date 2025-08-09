@@ -5,9 +5,10 @@ import type { Config, SanitizedService } from "../../../shared/types/config";
 interface SidebarProps {
 	services: SanitizedService[];
 	app: Config["app"];
+	collapsed?: boolean;
 }
 
-export function Sidebar({ services, app }: SidebarProps) {
+export function Sidebar({ services, app, collapsed = false }: SidebarProps) {
 	const params = useParams();
 	const currentServiceId = params.serviceId;
 
@@ -20,11 +21,24 @@ export function Sidebar({ services, app }: SidebarProps) {
 
 	return (
 		<aside
-			className="fixed left-0 top-0 h-full max-w-13 bg-black border-r border-gray-800/10 overflow-y-auto group/root"
-			data-minimized={"true"}
+			className={cn(
+				"fixed left-0 top-0 h-full bg-black border-r border-gray-800/10 overflow-y-auto transition-all duration-300",
+				collapsed ? "w-0 -translate-x-full" : "w-12"
+			)}
+			data-collapsed={collapsed}
 		>
 			<nav className="flex flex-col gap-1 p-1">
 				{sortedServices.map((service) => {
+					const ServiceIcon = () => (
+						service.icon && (
+							service.icon.startsWith("/") || service.icon.startsWith("http") ? (
+								<img src={service.icon} className="h-6 w-6 flex-shrink-0" alt={service.name} />
+							) : (
+								<span className="text-2xl flex-shrink-0">{service.icon}</span>
+							)
+						)
+					);
+
 					if (service.openInNewTab) {
 						// For services that open in new tab, use an anchor tag
 						return (
@@ -34,19 +48,12 @@ export function Sidebar({ services, app }: SidebarProps) {
 								target="_blank"
 								rel="noopener noreferrer"
 								className={cn(
-									`flex m-2 gap-4 rounded-lg text-gray-300 transition-colors items-center justify-center hover:brightness-110`,
-									currentServiceId === service.id && "bg-gray-800 text-white",
+									"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors hover:bg-gray-800/50",
+									currentServiceId === service.id && "bg-gray-800 text-white"
 								)}
+								title={service.name}
 							>
-								<img src={service.icon} className="h-6 w-6" alt={service.name} />
-								<div className="flex-1 min-w-0 group-data-[minimized=true]/root:hidden">
-									<div className="truncate">{service.name}</div>
-									{service.description && (
-										<div className="text-xs text-gray-500 truncate">
-											{service.description}
-										</div>
-									)}
-								</div>
+								<ServiceIcon />
 							</a>
 						);
 					}
@@ -57,19 +64,12 @@ export function Sidebar({ services, app }: SidebarProps) {
 							key={service.id}
 							to={`/service/${service.id}`}
 							className={cn(
-								`flex m-2 gap-4 rounded-lg text-gray-300 transition-colors items-center justify-center hover:brightness-110`,
-								currentServiceId === service.id && "bg-gray-800 text-white",
+								"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors hover:bg-gray-800/50",
+								currentServiceId === service.id && "bg-gray-800 text-white"
 							)}
+							title={service.name}
 						>
-							<img src={service.icon} className="h-6 w-6" alt={service.name} />
-							<div className="flex-1 min-w-0 group-data-[minimized=true]/root:hidden">
-								<div className="truncate">{service.name}</div>
-								{service.description && (
-									<div className="text-xs text-gray-500 truncate">
-										{service.description}
-									</div>
-								)}
-							</div>
+							<ServiceIcon />
 						</Link>
 					);
 				})}

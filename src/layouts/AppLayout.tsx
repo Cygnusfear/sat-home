@@ -15,6 +15,20 @@ export default function AppLayout() {
 	const [config, setConfig] = useState<SanitizedConfig | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+	// Toggle sidebar with CMD+B
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				setSidebarCollapsed(prev => !prev);
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, []);
 
 	useEffect(() => {
 		console.log("AppLayout useEffect running!");
@@ -80,8 +94,12 @@ export default function AppLayout() {
 	return (
 		<>
 			<div className="flex h-screen w-screen linear">
-				<Sidebar services={config.services} app={config.app} />
-				<main className="flex-1 ml-12 w-full">
+				<Sidebar 
+					services={config.services} 
+					app={config.app} 
+					collapsed={sidebarCollapsed}
+				/>
+				<main className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? 'ml-0' : 'ml-12'}`}>
 					<Outlet context={{ config }} />
 				</main>
 			</div>
