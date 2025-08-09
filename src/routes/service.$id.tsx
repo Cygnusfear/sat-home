@@ -25,7 +25,7 @@ export default function ServicePage() {
 	if (!context || !context.config) {
 		return (
 			<div className="flex items-center justify-center h-full">
-				<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+				<div className="animate-spin rounded-full h-12 w-12 "></div>
 			</div>
 		);
 	}
@@ -51,12 +51,20 @@ export default function ServicePage() {
 			<div className="flex items-center justify-center h-full">
 				<div className="text-center">
 					<div className="text-6xl mb-4">🚀</div>
-					<p className="text-gray-300 text-lg mb-2">{service.name} opens in a new tab</p>
+					<p className="text-gray-300 text-lg mb-2">
+						{service.name} opens in a new tab
+					</p>
 					<p className="text-gray-500">Click the sidebar link to open</p>
 				</div>
 			</div>
 		);
 	}
 
-	return <ServiceFrame serviceId={service.id} serviceName={service.name} serviceUrl={service.url} />;
+	return (
+		<ServiceFrame
+			serviceId={service.id}
+			serviceName={service.name}
+			serviceUrl={service.url}
+		/>
+	);
 }

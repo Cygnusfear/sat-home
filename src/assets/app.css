@@ -6,9 +6,13 @@
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+* {
+	@apply border-0; 
+}
+
 html,
 body {
-	@apply bg-[#101010] dark:bg-gray-950 w-screen h-screen;
+	@apply bg-[#101010] w-screen h-screen;
 
 	@media (prefers-color-scheme: dark) {
 		color-scheme: dark;

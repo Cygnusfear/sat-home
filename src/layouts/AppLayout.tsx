@@ -51,7 +51,7 @@ export default function AppLayout() {
 		return (
 			<div className="flex items-center justify-center h-screen bg-gray-950">
 				<div className="text-center">
-					<div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+					<div className="inline-block animate-spin rounded-full h-12 w-1w"></div>
 					<p className="mt-4 text-gray-400">Loading configuration...</p>
 				</div>
 			</div>
@@ -81,7 +81,7 @@ export default function AppLayout() {
 		<>
 			<div className="flex h-screen w-screen linear">
 				<Sidebar services={config.services} app={config.app} />
-				<main className="flex-1 ml-13 w-full">
+				<main className="flex-1 ml-12 w-full">
 					<Outlet context={{ config }} />
 				</main>
 			</div>
