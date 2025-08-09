@@ -22,7 +22,7 @@
       "id": "radarr",
       "name": "Radarr",
       "url": "https://radarr.example.com",
-      "icon": "🎬",
+      "icon": "/images/radarr.png",
       "description": "Movie collection manager",
       "auth": {
         "type": "forms",
@@ -36,7 +36,7 @@
       "id": "sonarr",
       "name": "Sonarr",
       "url": "https://sonarr.example.com",
-      "icon": "📺",
+      "icon": "/images/sonarr.png",
       "description": "TV show collection manager",
       "auth": {
         "type": "forms",
@@ -76,7 +76,7 @@
       "id": "homeassistant",
       "name": "Home Assistant",
       "url": "https://homeassistant.example.com",
-      "icon": "🏠",
+      "icon": "/images/homeassistant.png",
       "description": "Smart home automation",
       "auth": {
         "type": "bearer",
@@ -104,7 +104,7 @@
       "id": "pihole",
       "name": "Pi-hole",
       "url": "https://pihole.example.com/admin",
-      "icon": "🛡️",
+      "icon": "/images/pihole.png",
       "description": "Network-wide ad blocking",
       "auth": {
         "type": "none"
