@@ -1,4 +1,4 @@
-# Satsang Home
+# ⛩️ Satsang
 
 A lightweight, self-hosted dashboard for managing and accessing your home lab services through a unified interface. Built with React Router v7, TypeScript, and Bun.
 
