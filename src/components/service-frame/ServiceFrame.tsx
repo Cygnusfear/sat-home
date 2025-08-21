@@ -76,6 +76,23 @@ export function ServiceFrame({
 
 	const handleLoad = () => {
 		setLoading(false);
+		try {
+			document?.addEventListener("keydown", handleKeyDown);
+			iframeRef.current?.contentWindow?.addEventListener(
+				"keydown",
+				handleKeyDown,
+			);
+			iframeRef.current?.contentWindow?.document?.addEventListener(
+				"keydown",
+				handleKeyDown,
+			);
+			iframeRef.current?.contentWindow?.document.body?.addEventListener(
+				"keydown",
+				handleKeyDown,
+			);
+		} catch (err) {
+			console.error("Failed to add keydown listener:", err);
+		}
 	};
 
 	const handleError = () => {
