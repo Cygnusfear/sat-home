@@ -1,42 +1,48 @@
-import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router";
 import type { SanitizedService } from "../../../shared/types/config";
 import { ServiceFrame } from "../service-frame/ServiceFrame";
 
 interface ServiceManagerProps {
 	services: SanitizedService[];
+	onCommandOpen: () => void;
+	onSidebarOpen: () => void;
 }
 
-export function ServiceManager({ services }: ServiceManagerProps) {
+export function ServiceManager({
+	services,
+	onCommandOpen,
+	onSidebarOpen,
+}: ServiceManagerProps) {
 	const params = useParams();
 	const location = useLocation();
 	const [loadedServices, setLoadedServices] = useState<Set<string>>(new Set());
-	
+
 	// Get the service ID from the URL
-	const id = params.id || params['*'];
+	const id = params.id || params["*"];
 
 	// Track which services have been accessed
 	useEffect(() => {
 		if (id && !loadedServices.has(id)) {
-			setLoadedServices(prev => new Set(prev).add(id));
+			setLoadedServices((prev) => new Set(prev).add(id));
 		}
 	}, [id, loadedServices]);
 
 	// Only show on service routes
-	const isServiceRoute = location.pathname.startsWith('/service/');
+	const isServiceRoute = location.pathname.startsWith("/service/");
 	if (!isServiceRoute) {
 		return null;
 	}
 
 	// Filter out services that open in new tab
-	const iframeServices = services.filter(s => !s.openInNewTab);
+	const iframeServices = services.filter((s) => !s.openInNewTab);
 
 	return (
 		<div className="relative w-full h-full">
 			{iframeServices.map((service) => {
 				const isActive = service.id === id;
 				const hasBeenLoaded = loadedServices.has(service.id);
-				
+
 				// Only render the iframe if it's been accessed at least once
 				if (!hasBeenLoaded && !isActive) {
 					return null;
@@ -54,26 +60,28 @@ export function ServiceManager({ services }: ServiceManagerProps) {
 							serviceName={service.name}
 							serviceUrl={service.url}
 							useProxy={service.useProxy}
+							onCommandOpen={onCommandOpen}
+							onSidebarOpen={onSidebarOpen}
 						/>
 					</div>
 				);
 			})}
-			
+
 			{/* Show message for new tab services */}
-			{services.find(s => s.id === id && s.openInNewTab) && (
+			{services.find((s) => s.id === id && s.openInNewTab) && (
 				<div className="flex items-center justify-center h-full">
 					<div className="text-center">
 						<div className="text-6xl mb-4">🚀</div>
 						<p className="text-gray-300 text-lg mb-2">
-							{services.find(s => s.id === id)?.name} opens in a new tab
+							{services.find((s) => s.id === id)?.name} opens in a new tab
 						</p>
 						<p className="text-gray-500">Click the sidebar link to open</p>
 					</div>
 				</div>
 			)}
-			
+
 			{/* Show not found if service doesn't exist */}
-			{id && !services.find(s => s.id === id) && (
+			{id && !services.find((s) => s.id === id) && (
 				<div className="flex items-center justify-center h-full">
 					<div className="text-center">
 						<div className="text-4xl mb-4">❓</div>

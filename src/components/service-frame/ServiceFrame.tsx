@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface ServiceFrameProps {
 	serviceId: string;
 	serviceName: string;
 	serviceUrl: string;
 	useProxy?: boolean;
+	onCommandOpen: () => void;
+	onSidebarOpen: () => void;
 }
 
 export function ServiceFrame({
@@ -12,6 +14,8 @@ export function ServiceFrame({
 	serviceName,
 	serviceUrl,
 	useProxy = false,
+	onCommandOpen,
+	onSidebarOpen,
 }: ServiceFrameProps) {
 	const iframeRef = useRef<HTMLIFrameElement>(null);
 	const [loading, setLoading] = useState(true);
@@ -19,6 +23,50 @@ export function ServiceFrame({
 
 	// Use proxy URL if configured, otherwise direct URL
 	const iframeUrl = useProxy ? `/api/proxy/${serviceId}/` : serviceUrl;
+
+	const handleKeyDown = useCallback(
+		(e: KeyboardEvent) => {
+			const isMod = e.metaKey || e.ctrlKey;
+			console.log("keydown");
+			if (isMod && e.key === "k") {
+				e.preventDefault();
+				e.stopPropagation();
+				onCommandOpen();
+
+				// Blur iframe if it has focus
+				const activeElement = document.activeElement;
+				if (activeElement?.tagName === "IFRAME") {
+					(activeElement as HTMLIFrameElement).blur();
+				}
+			} else if (isMod && e.key === "b") {
+				e.preventDefault();
+				e.stopPropagation();
+				onSidebarOpen();
+			}
+		},
+		[onCommandOpen, onSidebarOpen],
+	);
+
+	useEffect(() => {
+		console.log(iframeRef.current);
+		try {
+			document?.addEventListener("keydown", handleKeyDown);
+			iframeRef.current?.contentWindow?.addEventListener(
+				"keydown",
+				handleKeyDown,
+			);
+			iframeRef.current?.contentWindow?.document?.addEventListener(
+				"keydown",
+				handleKeyDown,
+			);
+			iframeRef.current?.contentWindow?.document.body?.addEventListener(
+				"keydown",
+				handleKeyDown,
+			);
+		} catch (err) {
+			console.error("Failed to add keydown listener:", err);
+		}
+	}, [handleKeyDown]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <trigger on serviceId only>
 	useEffect(() => {

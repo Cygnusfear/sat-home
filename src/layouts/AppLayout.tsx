@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import CommandMenu from "src/components/command";
 import type { Config, SanitizedService } from "../../shared/types/config";
-import { KeyboardInterceptor } from "../components/keyboard-interceptor/KeyboardInterceptor";
 import { ServiceManager } from "../components/service-manager/ServiceManager";
 import { Sidebar } from "../components/sidebar/Sidebar";
 import "../assets/command.css";
@@ -13,7 +12,6 @@ interface SanitizedConfig {
 }
 
 export default function AppLayout() {
-	console.log("AppLayout component rendering!");
 	const [config, setConfig] = useState<SanitizedConfig | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -89,10 +87,7 @@ export default function AppLayout() {
 	}
 
 	return (
-		<KeyboardInterceptor
-			onToggleSidebar={() => setSidebarCollapsed((prev) => !prev)}
-			onOpenCommand={() => setCommandOpen((prev) => !prev)}
-		>
+		<>
 			<div className="flex h-screen w-screen">
 				<Sidebar
 					services={config.services}
@@ -104,7 +99,11 @@ export default function AppLayout() {
 					className={`flex-1 w-full transition-all duration-300 ${sidebarCollapsed ? "ml-0" : "ml-12"}`}
 				>
 					<Outlet context={{ config }} />
-					<ServiceManager services={config.services} />
+					<ServiceManager
+						services={config.services}
+						onCommandOpen={() => setCommandOpen((prev) => !prev)}
+						onSidebarOpen={() => setSidebarCollapsed((prev) => !prev)}
+					/>
 				</main>
 			</div>
 			<CommandMenu
@@ -112,6 +111,6 @@ export default function AppLayout() {
 				open={commandOpen}
 				onOpenChange={setCommandOpen}
 			/>
-		</KeyboardInterceptor>
+		</>
 	);
 }

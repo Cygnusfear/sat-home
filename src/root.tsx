@@ -29,8 +29,6 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-	console.log("Layout rendering");
-
 	return (
 		<html lang="en" className="h-full bg-black dark ">
 			<head>
@@ -49,7 +47,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	console.log("Root App rendering");
 	return <Outlet />;
 }
 
