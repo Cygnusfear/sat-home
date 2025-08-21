@@ -27,7 +27,6 @@ export function ServiceFrame({
 	const handleKeyDown = useCallback(
 		(e: KeyboardEvent) => {
 			const isMod = e.metaKey || e.ctrlKey;
-			console.log("keydown");
 			if (isMod && e.key === "k") {
 				e.preventDefault();
 				e.stopPropagation();
@@ -47,26 +46,40 @@ export function ServiceFrame({
 		[onCommandOpen, onSidebarOpen],
 	);
 
+	// Setup keyboard listener on main document
 	useEffect(() => {
-		console.log(iframeRef.current);
-		try {
-			document?.addEventListener("keydown", handleKeyDown);
-			iframeRef.current?.contentWindow?.addEventListener(
-				"keydown",
-				handleKeyDown,
-			);
-			iframeRef.current?.contentWindow?.document?.addEventListener(
-				"keydown",
-				handleKeyDown,
-			);
-			iframeRef.current?.contentWindow?.document.body?.addEventListener(
-				"keydown",
-				handleKeyDown,
-			);
-		} catch (err) {
-			console.error("Failed to add keydown listener:", err);
-		}
+		document.addEventListener("keydown", handleKeyDown);
+		
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
 	}, [handleKeyDown]);
+
+	// Listen for messages from iframes (for Traefik-injected script)
+	useEffect(() => {
+		const handleMessage = (event: MessageEvent) => {
+			// Validate the message
+			if (event.data?.type === "keyboard-shortcut") {
+				const { key, metaKey, ctrlKey } = event.data;
+				const isMod = metaKey || ctrlKey;
+				
+				if (isMod && key === "k") {
+					onCommandOpen();
+					// Blur iframe
+					if (iframeRef.current) {
+						iframeRef.current.blur();
+					}
+				} else if (isMod && key === "b") {
+					onSidebarOpen();
+				}
+			}
+		};
+
+		window.addEventListener("message", handleMessage);
+		return () => {
+			window.removeEventListener("message", handleMessage);
+		};
+	}, [onCommandOpen, onSidebarOpen]);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <trigger on serviceId only>
 	useEffect(() => {
@@ -76,23 +89,6 @@ export function ServiceFrame({
 
 	const handleLoad = () => {
 		setLoading(false);
-		try {
-			document?.addEventListener("keydown", handleKeyDown);
-			iframeRef.current?.contentWindow?.addEventListener(
-				"keydown",
-				handleKeyDown,
-			);
-			iframeRef.current?.contentWindow?.document?.addEventListener(
-				"keydown",
-				handleKeyDown,
-			);
-			iframeRef.current?.contentWindow?.document.body?.addEventListener(
-				"keydown",
-				handleKeyDown,
-			);
-		} catch (err) {
-			console.error("Failed to add keydown listener:", err);
-		}
 	};
 
 	const handleError = () => {
