@@ -30,7 +30,7 @@ export function Sidebar({
 		<>
 			<aside
 				className={cn(
-					"fixed left-0 bottom-0 h-11 bg-black/10 z-100 rounded-tr-xl transition-all duration-300 hover:bg-black opacity-5 hover:opacity-100",
+					"fixed left-0 top-0 h-11 bg-black/10 z-100 rounded-br-xl transition-all duration-300 hover:bg-black opacity-5 hover:opacity-100",
 					!collapsed ? "w-0 -translate-x-full" : "w-11",
 				)}
 				data-collapsed={collapsed}
@@ -59,6 +59,20 @@ export function Sidebar({
 				data-collapsed={collapsed}
 			>
 				<nav className="flex flex-col gap-1 p-1 h-full -mb-2 overflow-hidden">
+					<Link
+						key={"bar"}
+						to={`#`}
+						className={cn(
+							"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors",
+						)}
+						title={"Toggle Sidebar"}
+						onClick={onToggleCollapsed}
+					>
+						<LuChevronsLeft
+							className="h-4 w-4 flex-shrink-0"
+							title={"Toggle Sidebar"}
+						/>
+					</Link>
 					{sortedServices.map((service) => {
 						const ServiceIcon = () =>
 							service.icon &&
@@ -90,20 +104,6 @@ export function Sidebar({
 						);
 					})}
 					<div className="flex-grow" />
-					<Link
-						key={"bar"}
-						to={`#`}
-						className={cn(
-							"flex items-center justify-center p-2 rounded-lg text-gray-300 transition-colors",
-						)}
-						title={"Toggle Sidebar"}
-						onClick={onToggleCollapsed}
-					>
-						<LuChevronsLeft
-							className="h-4 w-4 flex-shrink-0"
-							title={"Toggle Sidebar"}
-						/>
-					</Link>
 				</nav>
 			</aside>
 		</>
