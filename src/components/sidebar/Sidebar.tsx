@@ -58,7 +58,7 @@ export function Sidebar({
 				)}
 				data-collapsed={collapsed}
 			>
-				<nav className="flex flex-col gap-1 p-1 h-full -mb-2 overflow-hidden">
+				<nav className="flex flex-col gap-1 p-1 h-full -mb-2 overflow-scroll">
 					<Link
 						key={"bar"}
 						to={`#`}

@@ -19,6 +19,11 @@ body {
 	}
 }
 
+nav {
+	scrollbar-color: transparent;
+	scrollbar-width: none;
+}
+
 /* Command Menu Animations */
 @keyframes animate-in {
 	from {
