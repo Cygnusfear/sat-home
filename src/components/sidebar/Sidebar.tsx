@@ -30,7 +30,7 @@ export function Sidebar({
 		<>
 			<aside
 				className={cn(
-					"fixed left-0 top-0 h-11 bg-black/10 z-100 rounded-br-xl transition-all duration-300 hover:bg-black opacity-5 hover:opacity-100",
+					"fixed left-0 bottom-0 h-11 bg-black/10 z-100 rounded-br-xl transition-all duration-300 hover:bg-black opacity-5 hover:opacity-100",
 					!collapsed ? "w-0 -translate-x-full" : "w-11",
 				)}
 				data-collapsed={collapsed}
