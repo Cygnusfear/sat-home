@@ -215,11 +215,47 @@ export const proxyRoutes = new Elysia({ prefix: "/api/proxy" })
 
       const contentType = response.headers.get("content-type") || "";
       
-      if (contentType.includes("text/html") || 
-          contentType.includes("text/css") || 
+      if (contentType.includes("text/html") ||
+          contentType.includes("text/css") ||
           contentType.includes("application/javascript") ||
           contentType.includes("text/javascript")) {
         let text = await response.text();
+
+        // Inject keyboard shortcut script into HTML pages
+        if (contentType.includes("text/html")) {
+          const keyboardScript = `
+<script>
+// Satsang Home: Forward keyboard shortcuts to parent window
+(function() {
+    'use strict';
+    if (window.self === window.top) return;
+    document.addEventListener('keydown', function(e) {
+        var isMod = e.metaKey || e.ctrlKey;
+        if ((isMod && e.key === 'k') || (isMod && e.key === 'b')) {
+            window.parent.postMessage({
+                type: 'keyboard-shortcut',
+                key: e.key,
+                metaKey: e.metaKey,
+                ctrlKey: e.ctrlKey,
+                shiftKey: e.shiftKey,
+                altKey: e.altKey
+            }, '*');
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
+})();
+</script>`;
+          // Inject before </body> or </html>, whichever comes first
+          if (text.includes('</body>')) {
+            text = text.replace('</body>', keyboardScript + '</body>');
+          } else if (text.includes('</html>')) {
+            text = text.replace('</html>', keyboardScript + '</html>');
+          } else {
+            // Append to end if no closing tags found
+            text += keyboardScript;
+          }
+        }
         
         // HTML attribute rewriting
         text = text.replace(
